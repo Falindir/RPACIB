@@ -117,9 +117,9 @@ createContentFile <- function() {
   listRBIO <- paste0(listRBIO, "\n\tbiocLite(")
   for (pkg in 1:sizeBIO){
     if(pkg < sizeBIO) {
-      listRBIO <- paste0(listRBIO, '"',selectBIO[pkg],'", ')
+      listRBIO <- paste0(listRBIO, '\'',selectBIO[pkg],'\', ')
     } else {
-      listRBIO <- paste0(listRBIO, '"',selectBIO[pkg],'")"')
+      listRBIO <- paste0(listRBIO, '\'',selectBIO[pkg],'\')"')
     }
   }
   result <- paste(result, listRBIO, sep = "\n")
@@ -143,9 +143,9 @@ createContentFile <- function() {
       listRGITHUB <- '\tR --slave -e "install_github(c('
       for (pkg in 1:sizeGITHUB){
         if(pkg < sizeGITHUB) {
-          listRGITHUB <- paste0(listRGITHUB, '"',selectGITHUB[pkg],'", ')
+          listRGITHUB <- paste0(listRGITHUB, '\'',selectGITHUB[pkg],'\', ')
         } else {
-          listRGITHUB <- paste0(listRGITHUB, '"',selectGITHUB[pkg],'"))"')
+          listRGITHUB <- paste0(listRGITHUB, '\'',selectGITHUB[pkg],'\'))"')
         }
       }
       result <- paste(result, listRGITHUB, sep = "\n")
