@@ -202,10 +202,12 @@ observeEvent(input$findGithub, {
   if(!stri_isempty(name)) {
     allGITHUB <<- data.frame(Package = gh_suggest(name, keep_title = FALSE), Title = attr(gh_suggest(name, keep_title = TRUE), "title"))
     
+    if(length(allGITHUB)  >= 1 ) {
     output$dtrgithubpackage <- DT::renderDataTable({
       result <- allGITHUB
       return(result)
     }, filter='top', escape = FALSE, rownames= FALSE,server = TRUE)
+    }
   }
   
 })
