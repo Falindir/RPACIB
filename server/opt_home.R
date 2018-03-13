@@ -77,13 +77,16 @@ createContentFile <- function() {
   
   result <- paste(result, "\n", sep = "\n")
   
-  selectCRAN <- allCRAN[input$dtrcranpackage_rows_selected,]
+  selectCRAN <- allCRAN[input$dtrcranpackage_rows_all,]
   selectCRAN <- selectCRAN[,"Package"]
   
   
   sizeCRAN <- length(selectCRAN)
   
+  
+  
      if(!is.null(sizeCRAN)) {
+       if(sizeCRAN < length(allCRAN[,"Package"])) { 
        if(sizeCRAN >= 1) { 
     listRCRAN <- '\techo install.packages\\(c('
     for (pkg in 1:sizeCRAN){
@@ -95,19 +98,20 @@ createContentFile <- function() {
     }
     result <- paste(result, listRCRAN, sep = "\n")
   
-       }
+       }}
      }
   result <- paste(result, "\n", sep = "\n")
   
 
   
-  selectBIO <- allBIO[input$dtrbioconductorpackage_rows_selected,]
+  selectBIO <- allBIO[input$dtrbioconductorpackage_rows_all,]
   selectBIO <- selectBIO[,"Package"]
   sizeBIO <- length(selectBIO)
   
   print(sizeBIO)
   
   if(!is.null(sizeBIO)) {
+    if(sizeBIO < length(allBIO[,"Package"])) { 
     if(sizeBIO >= 1) { 
       
       result <- paste(result, '\tR --slave -e "source(\'https://bioconductor.org/biocLite.R\'); \\', sep = "\n")
@@ -124,12 +128,13 @@ createContentFile <- function() {
   }
   result <- paste(result, listRBIO, sep = "\n")
     }
+    }
   }
   
   result <- paste(result, "\n", sep = "\n")
   
   
-  selectGITHUB <- allGITHUB[input$dtrgithubpackage_rows_selected,]
+  selectGITHUB <- allGITHUB[input$dtrgithubpackage_rows_all,]
   selectGITHUB <- selectGITHUB[,"Package"]
   
   print(selectGITHUB)
@@ -138,6 +143,7 @@ createContentFile <- function() {
 
   
   if(!is.null(sizeGITHUB)) {
+    if(sizeGITHUB < length(allGITHUB[,"Package"])) { 
     if(sizeGITHUB >= 1) { 
     
       listRGITHUB <- '\tR --slave -e "install_github(c('
@@ -149,6 +155,7 @@ createContentFile <- function() {
         }
       }
       result <- paste(result, listRGITHUB, sep = "\n")
+      }
     }
   }
   
