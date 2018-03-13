@@ -111,7 +111,7 @@ createContentFile <- function() {
     if(sizeBIO >= 1) { 
       
       result <- paste(result, '\tR --slave -e "source(\'https://bioconductor.org/biocLite.R\'); \\', sep = "\n")
-      result <- paste(result, "\tbiocLite()\n", sep = "\n")
+      result <- paste(result, '\tbiocLite()\n"', sep = "\n")
       
   listRBIO <- '\tR --slave -e "source(\'https://bioconductor.org/biocLite.R\'); \\'
   listRBIO <- paste0(listRBIO, "\n\tbiocLite(")
