@@ -1,7 +1,7 @@
 getPackagesWithTitle <- function() {
-       contrib.url(getOption("repos")["CRAN"], "source") 
+       contrib.url("https://cran.rstudio.com/", "source") 
        description <- sprintf("%s/web/packages/packages.rds", 
-                                getOption("repos")["CRAN"])
+                              "https://cran.rstudio.com/")
        con <- if(substring(description, 1L, 7L) == "file://") {
             file(description, "rb")
          } else {
