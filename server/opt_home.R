@@ -119,7 +119,7 @@ createContentFile <- function() {
     if(pkg < sizeBIO) {
       listRBIO <- paste0(listRBIO, '"',selectBIO[pkg],'", ')
     } else {
-      listRBIO <- paste0(listRBIO, '"',selectBIO[pkg],'")')
+      listRBIO <- paste0(listRBIO, '"',selectBIO[pkg],'")"')
     }
   }
   result <- paste(result, listRBIO, sep = "\n")
@@ -145,7 +145,7 @@ createContentFile <- function() {
         if(pkg < sizeGITHUB) {
           listRGITHUB <- paste0(listRGITHUB, '"',selectGITHUB[pkg],'", ')
         } else {
-          listRGITHUB <- paste0(listRGITHUB, '"',selectGITHUB[pkg],'"))')
+          listRGITHUB <- paste0(listRGITHUB, '"',selectGITHUB[pkg],'"))"')
         }
       }
       result <- paste(result, listRGITHUB, sep = "\n")
