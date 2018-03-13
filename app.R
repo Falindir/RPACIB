@@ -5,6 +5,9 @@ library(shinycssloaders)
 library(DT)
 library(dplyr)
 library(tools)
+library(githubinstall)
+require(stringi)  
+library(devtools)
 
 source("./R/helper_functions.R", local = T)
 source("./R/menugauche.R", local = T)
@@ -42,6 +45,7 @@ server <- function( input, output, session) {
   #allCRAN <<- as.data.frame(available.packages(repo = "http://cran.us.r-project.org")[, c("Package")])
   allCRAN <<- as.data.frame(getPackagesWithTitle())
   allBIO <<- as.data.frame(available.packages(repo = biocinstallRepos()[1])[, c("Package", "Version")])
+  allGITHUB <<- data.frame(Package=character(), Version=character())
   
   hide("downloadContainerFile")
 

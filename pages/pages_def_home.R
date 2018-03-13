@@ -37,6 +37,9 @@ tabHome = fluidPage(align="left",
                                           tabPanel('Bioconductor',   
                                             DT::dataTableOutput('dtrbioconductorpackage')),
                                           tabPanel('Github',
+                                            textInput("inputGithub", "Package name:", ""),
+                                            actionButton("findGithub", label = "Find", icon("paper-plane"), style="color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+                                            br(), br(),
                                             DT::dataTableOutput('dtrgithubpackage'))
                              )
                           )

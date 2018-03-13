@@ -127,6 +127,32 @@ createContentFile <- function() {
   }
   
   result <- paste(result, "\n", sep = "\n")
+  
+  
+  selectGITHUB <- allGITHUB[input$dtrgithubpackage_rows_selected,]
+  selectGITHUB <- selectGITHUB[,"Package"]
+  
+  print(selectGITHUB)
+  
+  sizeGITHUB <- length(selectGITHUB)
+
+  
+  if(!is.null(sizeGITHUB)) {
+    if(sizeGITHUB >= 1) { 
+    
+      listRGITHUB <- '\tR --slave -e "install_github(c('
+      for (pkg in 1:sizeGITHUB){
+        if(pkg < sizeGITHUB) {
+          listRGITHUB <- paste0(listRGITHUB, '"',selectGITHUB[pkg],'", ')
+        } else {
+          listRGITHUB <- paste0(listRGITHUB, '"',selectGITHUB[pkg],'"))')
+        }
+      }
+      result <- paste(result, listRGITHUB, sep = "\n")
+    }
+  }
+  
+  
   result <- paste(result, "\n", sep = "\n")
   
   result <- paste(result, input$customDataContainer, sep = "\t\n")
@@ -167,3 +193,21 @@ output$downloadContainerFile <- downloadHandler(
 #  updateSelectizeInput(session,"rcranpackagelist", choices = selectCRAN, selected = selectCRAN, options = list())
 #
 #})
+
+observeEvent(input$findGithub, {
+  
+  name <- input$inputGithub
+  
+  
+  if(!stri_isempty(name)) {
+    allGITHUB <<- data.frame(Package = gh_suggest(name, keep_title = FALSE), Title = attr(gh_suggest(name, keep_title = TRUE), "title"))
+    
+    output$dtrgithubpackage <- DT::renderDataTable({
+      result <- allGITHUB
+      return(result)
+    }, filter='top', escape = FALSE, rownames= FALSE,server = TRUE)
+  }
+  
+})
+
+
