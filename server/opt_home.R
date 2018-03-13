@@ -79,35 +79,52 @@ createContentFile <- function() {
   
   selectCRAN <- allCRAN[input$dtrcranpackage_rows_selected,]
   selectCRAN <- selectCRAN[,"Package"]
-  sizeCRAN <- length(selectCRAN)
-  listRCRAN <- '\techo install.packages\\(c('
-  for (pkg in 1:sizeCRAN){
-    if(pkg < sizeCRAN) {
-      listRCRAN <- paste0(listRCRAN, '"',selectCRAN[pkg],'", ')
-    } else {
-      listRCRAN <- paste0(listRCRAN, '"',selectCRAN[pkg],'"), repos\\=\'https://cloud.r-project.org\'\\) | R --slave ')
-    }
-  }
-  result <- paste(result, listRCRAN, sep = "\n")
   
+  
+  sizeCRAN <- length(selectCRAN)
+  
+     if(!is.null(sizeCRAN)) {
+       if(sizeCRAN >= 1) { 
+    listRCRAN <- '\techo install.packages\\(c('
+    for (pkg in 1:sizeCRAN){
+      if(pkg < sizeCRAN) {
+        listRCRAN <- paste0(listRCRAN, '"',selectCRAN[pkg],'", ')
+      } else {
+        listRCRAN <- paste0(listRCRAN, '"',selectCRAN[pkg],'"), repos\\=\'https://cloud.r-project.org\'\\) | R --slave ')
+      }
+    }
+    result <- paste(result, listRCRAN, sep = "\n")
+  
+       }
+     }
   result <- paste(result, "\n", sep = "\n")
   
-  result <- paste(result, '\tR --slave -e "source(\'https://bioconductor.org/biocLite.R\'); \\', sep = "\n")
-  result <- paste(result, "\tbiocLite()\n", sep = "\n")
+
   
   selectBIO <- allBIO[input$dtrbioconductorpackage_rows_selected,]
   selectBIO <- selectBIO[,"Package"]
   sizeBIO <- length(selectBIO)
+  
+  print(sizeBIO)
+  
+  if(!is.null(sizeBIO)) {
+    if(sizeBIO >= 1) { 
+      
+      result <- paste(result, '\tR --slave -e "source(\'https://bioconductor.org/biocLite.R\'); \\', sep = "\n")
+      result <- paste(result, "\tbiocLite()\n", sep = "\n")
+      
   listRBIO <- '\tR --slave -e "source(\'https://bioconductor.org/biocLite.R\'); \\'
   listRBIO <- paste0(listRBIO, "\n\tbiocLite(")
   for (pkg in 1:sizeBIO){
     if(pkg < sizeBIO) {
-      listRBIO <- paste0(listRBIO, '"',selectCRAN[pkg],'", ')
+      listRBIO <- paste0(listRBIO, '"',selectBIO[pkg],'", ')
     } else {
-      listRBIO <- paste0(listRBIO, '"',selectCRAN[pkg],'")')
+      listRBIO <- paste0(listRBIO, '"',selectBIO[pkg],'")')
     }
   }
   result <- paste(result, listRBIO, sep = "\n")
+    }
+  }
   
   result <- paste(result, "\n", sep = "\n")
   result <- paste(result, "\n", sep = "\n")
@@ -143,4 +160,10 @@ output$downloadContainerFile <- downloadHandler(
   }
 )
 
-
+#observeEvent(input$dtrcranpackage_rows_selected, {
+#  selectCRAN <- allCRAN[input$dtrcranpackage_rows_selected,]
+#  selectCRAN <- selectCRAN[,"Package"]
+#  
+#  updateSelectizeInput(session,"rcranpackagelist", choices = selectCRAN, selected = selectCRAN, options = list())
+#
+#})
