@@ -36,7 +36,7 @@ server <- function( input, output, session) {
     inputs
   }
   
-  allCRAN <<- as.data.frame(available.packages()[, c("Package", "Version")])
+  allCRAN <<- as.data.frame(available.packages(repo = "http://cran.us.r-project.org")[, c("Package", "Version")])
   allBIO <<- as.data.frame(available.packages(repo = biocinstallRepos()[1])[, c("Package", "Version")])
   
   hide("downloadContainerFile")
