@@ -6,7 +6,7 @@ library(DT)
 library(dplyr)
 library(tools)
 library(githubinstall)
-require(stringi)  
+require(stringi)
 library(devtools)
 
 source("./R/helper_functions.R", local = T)
