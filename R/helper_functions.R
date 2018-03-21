@@ -18,48 +18,66 @@ getPackagesWithTitle <- function() {
 
 
 getBioconductorPackage <- function() {
+
+  data <- yaml.load_file("container.yaml")$containers
   
-  Tool = c("DiffExpIR", 
-           "abyss",
-           "Aliscore"
-  )
+  size <- 0 
   
-  Version = c("0.0.1", 
-              "1.9.0",
-              "v.2.0"
-  )
+  for (tools in data) {
+    if(length(tools$install) > 0) {
+      size <- size + 1
+    }
+  }
   
-  Description = c("Differentially expressed intron retention",
-                  "ABySS is a *de novo* sequence assembler",
-                  "Aliscore is designed to filter alignment ambiguous or randomly similar sites in multiple sequence alignments (MSA)."
-  )
+  Tool <- character(size)
+  Version <- character(size)
+  Description <- character(size)
+  Link <- character(size)
+
+  i=1
+  for (tools in data) {
+    
+    if(length(tools$install) > 0) {
+    
+    Tool[i] = tools$name
+    Version[i] = tools$version
+    Description[i] = tools$description
+    Link[i] = paste0("<a href='", tools$documentation, "'>documentation</a>")
+    i = i + 1
+    }
+  }
   
-  Link = c("<a href='https://github.com/r78v10a07/DiffExpIR'>documentation</a>",
-           "<a href='https://github.com/bcgsc/abyss#abyss'>documentation</a>",
-           "<a href='https://www.zfmk.de/dateien/atoms/files/aliscore_v.2.0_manual_0.pdf'>documentation</a>"
-           
-  )
+  # Link = c("<a href='https://github.com/r78v10a07/DiffExpIR'>documentation</a>",
+  #          "<a href='https://github.com/bcgsc/abyss#abyss'>documentation</a>",
+  #          "<a href='https://www.zfmk.de/dateien/atoms/files/aliscore_v.2.0_manual_0.pdf'>documentation</a>"
+  #          
+  # )
   
   result <- data.frame(BioContainer_Tool=Tool,
                        Version=Version,
                        Description=Description,
-                       Documentation=Link)
-  
+                       Link=Link)
   
   return(result)
 }
 
 getInstallToolPackageBioContainer <- function(tool) {
   
-  if(tool == "DiffExpIR") {
-    return("")
-  } else if(tool == "abyss") {
-    return("\tconda install abyss=1.9.0")
+  data <- yaml.load_file("container.yaml")$containers
+
+  size <- length(data)
+  
+  intalls <- ""
+  
+  for (tools in data) {
+      if(tools$name == tool) {
+        res <- paste0("\t", tools$install, collapse='\n' )
+        return(res)
+      } 
   }
-  
-  
-    
-  return("")
+
+  return("\t")
+
 }
 
 

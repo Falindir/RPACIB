@@ -1,0 +1,91 @@
+containers: [
+{name: "abyss", version: "1.9.0", description: "ABySS is a *de novo* sequence assembler", documentation: "https://github.com/bcgsc/abyss#abyss", install: ["conda install abyss=1.9.0"] }
+,{ name: "aliscore", version: "2.0", description: "Aliscore is designed to filter alignment ambiguous or randomly similar sites in multiple sequence alignments (MSA).", documentation: "https://www.zfmk.de/dateien/atoms/files/aliscore_v.2.0_manual_0.pdf", install: ["wget http://software.zfmk.de/ALISCORE_v2.0.zip && unzip /tmp/ALISCORE_v2.0.zip -d ./ \\", "&& unzip /tmp/ALISCORE_v2.0/Aliscore_v.2.0.zip -d /opt/biotools/bin/Aliscore/ \\", "&& chmod -R 755 /opt/biotools/bin/Aliscore  \\", "&& rm -rf /tmp/ALISCORE_v2.0" ] }
+,{ name: "bamtools", version: "2.4.0", description: "C++ API & command-line toolkit for working with BAM data", documentation: "https://github.com/pezmaster31/bamtools/wiki", install: ["conda install bamtools=2.4.0"] }
+,{ name: "bcftools", version: "1.5", description: "Bcftools is a program for variant calling and manipulating VCFs and BCFs", documentation: "https://samtools.github.io/bcftools/", install: ["conda install bcftools=1.5"] }
+,{ name: "bedtools", version: "2.25.0", description: "a powerful toolset for genome arithmetic", documentation: "http://quinlanlab.org/tutorials/bedtools/bedtools.html", install: ["conda install bedtools=2.25.0"] }
+,{ name: "bior_annotate", version: "2.1.1", description: "", documentation: "", install: [] }
+,{ name: "blast", version: "2.2.31", description: "basic local alignment search tool", documentation: "http://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastHome", install: ["conda install blast=2.2.31"] }
+,{ name: "bowtie", version: "1.1.2", description: "an ultrafast memory-efficient short read aligner", documentation: "http://bowtie-bio.sourceforge.net/manual.shtml", install: ["conda install bowtie=1.1.2"] }
+,{ name: "bowtie2", version: "2.2.8", description: "an ultrafast memory-efficient short read aligner", documentation: "http://bowtie-bio.sourceforge.net/bowtie2/index.shtml", install: ["conda install bowtie2=2.2.8"] }
+,{ name: "bowtie2", version: "2.3.0", description: "an ultrafast memory-efficient short read aligner", documentation: "http://bowtie-bio.sourceforge.net/bowtie2/index.shtml", install: ["conda install bowtie2=2.3.0"] }
+,{ name: "bwa", version: "0.7.12", description: "Burrow-Wheeler Aligner for pairwise alignment between DNA sequences", documentation: "http://bio-bwa.sourceforge.net/", install: ["conda install bwa=0.7.12"] }
+,{ name: "bwa", version: "0.7.13", description: "Burrow-Wheeler Aligner for pairwise alignment between DNA sequences", documentation: "http://bio-bwa.sourceforge.net/", install: ["conda install bwa=0.7.13"] }
+,{ name: "bwa", version: "0.7.15", description: "Burrow-Wheeler Aligner for pairwise alignment between DNA sequences", documentation: "http://bio-bwa.sourceforge.net/", install: ["conda install bwa=0.7.15"] }
+,{ name: "cava", version: "1.1.1", description: "lightweight, fast and flexible NGS variant annotation tool", documentation: "http://www.well.ox.ac.uk/cava", install: [] }
+,{ name: "clustal-omega", version: "1.2.1-1", description: "general purpose multiple sequence alignment program for proteins", documentation: "http://www.clustal.org/omega/#Documentation", install: ["apt-get install  clustalo"] }
+,{ name: "comet", version: "2015011", description: "an open source tandem mass spectrometry sequence database search tool", documentation: "http://comet-ms.sourceforge.net/parameters/parameters_201601/", install: [] }
+,{ name: "comet", version: "2015012", description: "an open source tandem mass spectrometry sequence database search tool", documentation: "http://comet-ms.sourceforge.net/parameters/parameters_201601/", install: [] }
+,{ name: "comet", version: "2015020", description: "an open source tandem mass spectrometry sequence database search tool", documentation: "http://comet-ms.sourceforge.net/parameters/parameters_201601/", install: [] }
+,{ name: "comet", version: "2015025", description: "an open source tandem mass spectrometry sequence database search tool", documentation: "http://comet-ms.sourceforge.net/parameters/parameters_201601/", install: [] }
+,{ name: "comet", version: "2016010", description: "an open source tandem mass spectrometry sequence database search tool", documentation: "http://comet-ms.sourceforge.net/parameters/parameters_2016010/", install: [] }
+,{ name: "comet", version: "2016011", description: "an open source tandem mass spectrometry sequence database search tool", documentation: "http://comet-ms.sourceforge.net/parameters/parameters_2016010/", install: [] }
+,{ name: "comet", version: "2016012", description: "an open source tandem mass spectrometry sequence database search tool", documentation: "http://comet-ms.sourceforge.net/parameters/parameters_2016010/", install: [] }
+,{ name: "crux", version: "2.1", description: "a software toolkit for tandem mass spectrometry analysis", documentation: "http://cruxtoolkit.sourceforge.net/", install: [] }
+,{ name: "denovogui", version: "1.10.4", description: "graphical user interface for de novo sequencing of tandem mass spectra", documentation: "https://github.com/compomics/denovogui", install: [] }
+,{ name: "denovogui", version: "1.5.2", description: "graphical user interface for de novo sequencing of tandem mass spectra", documentation: "https://github.com/compomics/denovogui", install: [] }
+,{ name: "dia-umpire", version: "1.4256", description: "computational analysis of data independent acquisition (DIA) mass spectrometry-based proteomics data", documentation: "http://diaumpire.sourceforge.net", install: [] }
+,{ name: "dia-umpire", version: "2.1.2", description: "computational analysis of data independent acquisition (DIA) mass spectrometry-based proteomics data", documentation: "http://diaumpire.sourceforge.net", install: [] }
+,{ name: "DiffExpIR", version: "0.0.1", description: "Differentially expressed intron retention", documentation: "https://github.com/r78v10a07/DiffExpIR", install: [] }
+,{ name: "discovar", version: "52488", description: "DISCOVAR is a new variant caller", documentation: "http://www.broadinstitute.org/software/discovar/blog/?page_id=19", install: [] }
+,{ name: "discovardenovo", version: "52488", description: "Genome variant discovery through assembly", documentation: "http://www.broadinstitute.org/software/discovar/blog/?page_id=19", install: [] }
+,{ name: "emboss", version: "6.5.7", description: "software analysis package", documentation: "http://emboss.sourceforge.net/docs/", install: [] }
+,{ name: "entrez-direct", version: "7.50.20171103", description: "Entrez Direct (EDirect) is an advanced method for accessing the NCBI's set of interconnected Entrez databases", documentation: "https://ncbi.github.io/magicblast/", install: [] }
+,{ name: "fastqc", version: "0.11.5", description: "A quality control tool for high throughput sequence data.", documentation: "http://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/", install: [] }
+,{ name: "fastxtools", version: "0.0.14", description: "a collection of command line tools for Short-Reads FASTA/FASTQ files preprocessing", documentation: "http://hannonlab.cshl.edu/fastx_toolkit/commandline.html", install: [] }
+,{ name: "frc_align", version: "20150723", description: "Computes FRC from SAM/BAM file and not from afg files", documentation: "https://github.com/jts/frc_courve", install: [] }
+,{ name: "gapcloser", version: "1.12-r6", description: "A novel short-read assembly method that can build a de novo draft assembly for the human-sized genomes", documentation: "http://soap.genomics.org.cn/gapcloser.html", install: [] }
+,{ name: "gatk", version: "3.4", description: "", documentation: "", install: [] }
+,{ name: "gcta", version: "1.24.7", description: "", documentation: "", install: [] }
+,{ name: "htslib", version: "1.2.1", description: "", documentation: "", install: [] }
+,{ name: "jbrowse", version: "1.11.6", description: "", documentation: "", install: [] }
+,{ name: "jellyfish", version: "2.2.3", description: "", documentation: "", install: [] }
+,{ name: "magicblast", version: "1.3.0", description: "Magic-BLAST is a new tool for mapping large sets of next-generation RNA or DNA sequencing runs against a whole genome or transcriptome", documentation: "https://ncbi.github.io/magicblast/", install: [] }
+,{ name: "msamanda", version: "1.0.0.5242", description: "scoring system to identify peptides out of tandem mass spectrometry", documentation: "http://ms.imp.ac.at/?goto=msamanda", install: [] }
+,{ name: "msgfp", version: "9949", description: "MS/MS database search tool", documentation: "http://proteomics.ucsd.edu/Software/MSGFPlus/", install: [] }
+,{ name: "novor", version: "1b", description: "real-time peptide de novo sequencing", documentation: "http://www.rapidnovor.com/", install: [] }
+,{ name: "openms", version: "1.11.1-3", description: "C++ libraries ans tools for MS/MS data analysis", documentation: "http://open-ms.sourceforge.net/", install: [] }
+,{ name: "openms", version: "2.0.0", description: "C++ libraries ans tools for MS/MS data analysis", documentation: "http://open-ms.sourceforge.net/", install: [] }
+,{ name: "openms", version: "2.2.0", description: "C++ libraries ans tools for MS/MS data analysis", documentation: "http://ftp.mi.fu-berlin.de/pub/OpenMS/release2.2.0-documentation/html/index.html", install: [] }
+,{ name: "pepnovo+", version: "20120423", description: "de novo sequencing of low precision MS/MS data", documentation: "http://proteomics.ucsd.edu/Software/PepNovo/", install: [] }
+,{ name: "peptideprophet", version: "201510131012", description: "Peptide assignment statistics and validation", documentation: "http://peptideprophet.sourceforge.net/", install: [] }
+,{ name: "peptideshaker", version: "1.10.3", description: "interpretation of proteomics identification results", documentation: "http://compomics.github.io/projects/peptide-shaker.html", install: [] }
+,{ name: "peptideshaker", version: "1.16.16", description: "interpretation of proteomics identification results", documentation: "http://compomics.github.io/projects/peptide-shaker.html", install: [] }
+,{ name: "peptideshaker", version: "1.16.17", description: "interpretation of proteomics identification results", documentation: "http://compomics.github.io/projects/peptide-shaker.html", install: [] }
+,{ name: "percolator", version: "3.0", description: "Semi-supervised learning for peptide identification from shotgun proteomics datasets", documentation: "http://percolator.ms/", install: [] }
+,{ name: "pia", version: "1.1.0-SNAPSHOT", description: "Compile PIA XML files and run pipelines with this image", documentation: "https://github.com/mpc-bioinformatics/pia", install: [] }
+,{ name: "pia", version: "1.3.0", description: "Compile PIA XML files and run analysis pipelines for protein inference with this image", documentation: "https://github.com/julianu/pia-tutorial", install: [] }
+,{ name: "pia-web-server", version: "1.1.0-SNAPSHOT", description: "Web server for PIA - Protein Inference Algorithms", documentation: "https://github.com/mpc-bioinformatics/pia", install: [] }
+,{ name: "picard", version: "1.139", description: "A set of Java command line tools for manipulating high-throughput sequencing (HTS) data and formats.", documentation: "https://github.com/picard/picard", install: [] }
+,{ name: "picard", version: "1.141", description: "A set of Java command line tools for manipulating high-throughput sequencing (HTS) data and formats.", documentation: "https://github.com/picard/picard", install: [] }
+,{ name: "picard", version: "2.3.0", description: "A set of Java command line tools for manipulating high-throughput sequencing (HTS) data and formats.", documentation: "https://github.com/picard/picard", install: [] }
+,{ name: "progressive-cactus", version: "0.1", description: "multiple whole-genome alignment package", documentation: "https://github.com/glennhickey/progressiveCactus", install: [] }
+,{ name: "proteinprophet", version: "201510131012", description: "Protein inference for MS/MS analysis", documentation: "http://proteinprophet.sourceforge.net/", install: [] }
+,{ name: "proteowizard", version: "3_0_9740", description: "tools and software libraries that facilitate proteomics data analysis", documentation: "http://proteowizard.sourceforge.net/", install: [] }
+,{ name: "raremetalworker", version: "4.13.7", description: "single variant analysis, generating summary statistics for gene level meta analyses", documentation: " http://genome.sph.umich.edu/wiki/RAREMETALWORKER", install: [] }
+,{ name: "saintq", version: "0.0.2", description: "assigning confidence scores to protein-protein interactions based on quantitative proteomics", documentation: "http://saint-apms.sourceforge.net/Main.html", install: [] }
+,{ name: "samtools", version: "1.2", description: "Tools for manipulating next-generation sequencing data", documentation: "https://github.com/samtools/samtools", install: [] }
+,{ name: "samtools", version: "1.3", description: "Tools for manipulating next-generation sequencing data", documentation: "https://github.com/samtools/samtools", install: [] }
+,{ name: "samtools", version: "1.3.1", description: "Tools for manipulating next-generation sequencing data", documentation: "https://github.com/samtools/samtools", install: [] }
+,{ name: "searchgui", version: "2.6.0", description: "graphical user interface for proteomics identification search engines", documentation: "https://code.google.com/p/searchgui/", install: [] }
+,{ name: "searchgui", version: "2.8.6", description: "graphical user interface for proteomics identification search engines", documentation: "https://code.google.com/p/searchgui/", install: [] }
+,{ name: "sga", version: "0.10.13", description: "De novo sequence assembler using string graphs", documentation: "https://github.com/jts/sga/wiki", install: [] }
+,{ name: "snpeff", version: "4.1k", description: "Genetic variant annotation and effect prediction toolbox", documentation: "http://snpeff.sourceforge.net/", install: [] }
+,{ name: "soapdenovo", version: "240", description: "a novel short-read assembly method that can build a de novo draft assembly for the human-sized genomes", documentation: "http://soap.genomics.org.cn/soapdenovo.html", install: [] }
+,{ name: "soapec", version: "2.03", description: "A correction tool for SOAPdenovo", documentation: "http://soap.genomics.org.cn/soapdenovo.html", install: [] }
+,{ name: "spades", version: "3.6.0", description: "Tools (written in C using htslib) for manipulating next-generation sequencing data", documentation: "http://bioinf.spbau.ru/spades", install: [] }
+,{ name: "spectra-cluster-cli", version: "1.0", description: "PRIDE Cluster algorithm to cluster heterogeneous mass spectra", documentation: "https://github.com/spectra-cluster/spectra-cluster-cli", install: [] }
+,{ name: "stacks", version: "1.41", description: "Stacks was developed to work with restriction enzyme-based data, such as RAD-seq, for the purpose of building genetic maps and conducting population", documentation: "http://catchenlab.life.illinois.edu/stacks/", install: [] }
+,{ name: "tandem", version: "10-12-01-1", description: "software that can match tandem mass spectra with peptide sequences", documentation: "http://www.thegpm.org/tandem/", install: [] }
+,{ name: "tandem", version: "15-12-15-2", description: "software that can match tandem mass spectra with peptide sequences", documentation: "http://www.thegpm.org/tandem/", install: [] }
+,{ name: "test-ci", version: "0.0.1", description: "A test container for internal testing", documentation: "", install: [] }
+,{ name: "test-ci", version: "0.0.2", description: "A test container for internal testing", documentation: "", install: [] }
+,{ name: "tophat", version: "2.1.1", description: "TopHat is a fast splice junction mapper for RNA-Seq reads", documentation: "https://ccb.jhu.edu/software/tophat/index.shtml", install: [] }
+,{ name: "toppas", version: "1.11.1-3", description: "a graphical workflow editor for the analysis of high-throughput proteomics data", documentation: "http://open-ms.sourceforge.net/workflow-integration/toppasworkflows/", install: [] }
+,{ name: "TPMCalculator", version: "0.0.1", description: "This program calculates the TPM (Transcript per Millions) values for the exons and introns from NGS RNA-Seq aligned reads (BAM files)", documentation: "https://github.com/r78v10a07/TPMCalculator", install: [] }
+,{ name: "tpp", version: "4.8", description: "a collection of integrated tools for MS/MS proteomics", documentation: "http://tools.proteomecenter.org/wiki/index.php?title=Software:TPP", install: [] }
+,{ name: "tpp", version: "5.0", description: "a collection of integrated tools for MS/MS proteomics", documentation: "http://tools.proteomecenter.org/wiki/index.php?title=Software:TPP", install: [] }
+,{ name: "vcftools", version: "0.1.14", description: "A set of tools written in Perl and C++ for working with VCF files, such as those generated by the 1000 Genomes Project", documentation: "https://github.com/vcftools/vcftools|https://vcftools.github.io/index.html", install: [] }
+,{ name: "vcftools", version: "0.1.15", description: "A set of tools written in Perl and C++ for working with VCF files, such as those generated by the 1000 Genomes Project", documentation: "https://github.com/vcftools/vcftools|https://vcftools.github.io/index.html", install: [] }
+,{ name: "velvet", version: "1.2.10", description: "Short read de novo assembler using de Bruijn graphs", documentation: "https://www.zfmk.de/dateien/atoms/files/aliscore_v.2.0_manual_0.pdf", install: [] }
+]

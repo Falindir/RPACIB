@@ -255,7 +255,7 @@ createContentFile <- function() {
     result <- paste0(result, "\n")
     
     
-    result <- paste(result, "\mkdir /opt/biotools/bin", sep = "\n")
+    result <- paste(result, "\tmkdir /opt/biotools/bin", sep = "\n")
     result <- paste(result, "\tchmod 777 -R /opt/biotools/", sep = "\n")
     result <- paste(result, "\texport PATH=/opt/biotools/bin:$PATH", sep = "\n")
     
@@ -274,7 +274,7 @@ createContentFile <- function() {
     
     for (tool in selectBioTool){
         
-      result <- paste(result, getInstallToolPackageBioContainer(tool), sep="\n")
+      result <- paste(result, getInstallToolPackageBioContainer(tool), sep="\n\n")
       
     }
     

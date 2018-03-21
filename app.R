@@ -8,6 +8,7 @@ library(tools)
 library(githubinstall)
 require(stringi)
 library(devtools)
+library(yaml)
 
 source("./R/helper_functions.R", local = T)
 source("./R/menugauche.R", local = T)
