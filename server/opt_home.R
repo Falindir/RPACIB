@@ -218,12 +218,20 @@ createContentFile <- function() {
   } #END R
 
   
-  if(!is.null(input$dtbiocontainer_rows_all)) {
+  print(input$selectedBiocontainer)
+
+  if(!is.null(input$selectedBiocontainer)) {
     
-    biotools = getBioconductorPackage() 
+
+
     
-    selectBioTool<- biotools[input$dtbiocontainer_rows_all,]
-    selectBioTool <- selectBioTool[,"BioContainer_Tool"]
+
+  #if(!is.null(input$dtbiocontainer_rows_all)) {
+    
+    #biotools = getBioconductorPackage() 
+    
+    #selectBioTool <- biotools[input$dtbiocontainer_rows_all,]
+    selectBioTool <- input$selectedBiocontainer
     
     #result <- paste(result, "\tmv /etc/apt/sources.list /etc/apt/sources.list.bkp && \\",
     #                "\techo -e \"deb mirror://mirrors.ubuntu.com/mirrors.txt xenial main restricted universe multiverse\\n\\ ",
@@ -273,6 +281,8 @@ createContentFile <- function() {
     result <- paste0(result, "\n")
     
     for (tool in selectBioTool){
+      
+      
         
       result <- paste(result, getInstallToolPackageBioContainer(tool), sep="\n\n")
       
@@ -309,6 +319,22 @@ output$downloadContainerFile <- downloadHandler(
     write(result,file=file)
   }
 )
+
+observe({
+  
+  if(is.null(input$dtbiocontainer_rows_selected)) {
+    shinyjs::reset("formContainer")
+  } else {
+    i = 1
+    selectBiocontainer <- list()
+    for(x in input$dtbiocontainer_rows_selected) {
+      selectBiocontainer[i] = paste(allBIOCONTAINER[[x]]$name, allBIOCONTAINER[[x]]$version, sep = "%")
+      i = i + 1
+    }
+    selectBiocontainer <- c(unlist(selectBiocontainer))
+    updateSelectizeInput(session,"selectedBiocontainer", choices = selectBiocontainer, selected = selectBiocontainer, options = list())
+  }
+})
 
 observeEvent(input$dtrgithubpackage_rows_selected, {
   

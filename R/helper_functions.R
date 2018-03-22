@@ -37,14 +37,14 @@ getBioconductorPackage <- function() {
   i=1
   for (tools in data) {
     
-    if(length(tools$install) > 0) {
+    #if(length(tools$install) > 0) {
     
     Tool[i] = tools$name
     Version[i] = tools$version
     Description[i] = tools$description
     Link[i] = paste0("<a href='", tools$documentation, "'>documentation</a>")
     i = i + 1
-    }
+    #}
   }
   
   # Link = c("<a href='https://github.com/r78v10a07/DiffExpIR'>documentation</a>",
@@ -70,10 +70,16 @@ getInstallToolPackageBioContainer <- function(tool) {
   intalls <- ""
   
   for (tools in data) {
-      if(tools$name == tool) {
-        res <- paste0("\t", tools$install, collapse='\n' )
-        return(res)
-      } 
+      splitB <- strsplit(tool, "%")  
+      name <- splitB[[1]][1]
+      version <- splitB[[1]][2]
+      
+      if(tools$name == name) {
+        if(tools$version == version) {
+          res <- paste0("\t", tools$install, collapse='\n' )
+          return(res)
+        }
+      }
   }
 
   return("\t")

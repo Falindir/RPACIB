@@ -33,8 +33,6 @@ UI <- dashboardPage(
   )
 )
 
-
-
 server <- function( input, output, session) {
   
   source("https://bioconductor.org/biocLite.R")
@@ -47,6 +45,7 @@ server <- function( input, output, session) {
   allCRAN <<- as.data.frame(getPackagesWithTitle())
   allBIO <<- as.data.frame(available.packages(repo = biocinstallRepos()[1])[, c("Package", "Version")])
   allGITHUB <<- data.frame(Package=character(), Version=character())
+  allBIOCONTAINER <<- yaml.load_file("container.yaml")$containers
   
   hide("downloadContainerFile")
 

@@ -48,6 +48,8 @@ tabHome = fluidPage(align="left",
                                             br(), br(),
                                             DT::dataTableOutput('dtrgithubpackage')),
                                           tabPanel('BioContainer tools',
+                                                   div(id = "formContainer",
+                                                   selectizeInput('selectedBiocontainer', 'Biocontainer tools selected:', choices = NULL, multiple=TRUE, options = list(maxItems = 30000))),
                                                    DT::dataTableOutput('dtbiocontainer')
                                                    )
                              )
