@@ -45,7 +45,19 @@ server <- function( input, output, session) {
   allCRAN <<- as.data.frame(getPackagesWithTitle())
   allBIO <<- as.data.frame(available.packages(repo = biocinstallRepos()[1])[, c("Package", "Version")])
   allGITHUB <<- data.frame(Package=character(), Version=character())
-  allBIOCONTAINER <<- yaml.load_file("container.yaml")$containers
+  TMP <<- yaml.load_file("container.yaml")$containers 
+  i = 1
+  j = 1
+  allBIOCONTAINER <<- list()
+  for(x in TMP) {
+    if(length(TMP[[i]]$install) > 0) {
+      
+      allBIOCONTAINER[[j]] <<- TMP[[i]]
+      j = j + 1
+    }
+    i = i + 1
+  }
+  print(allBIOCONTAINER)
   
   hide("downloadContainerFile")
 

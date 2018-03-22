@@ -19,7 +19,7 @@ getPackagesWithTitle <- function() {
 
 getBioconductorPackage <- function() {
 
-  data <- yaml.load_file("container.yaml")$containers
+  data <- allBIOCONTAINER
   
   size <- 0 
   
@@ -63,7 +63,7 @@ getBioconductorPackage <- function() {
 
 getInstallToolPackageBioContainer <- function(tool) {
   
-  data <- yaml.load_file("container.yaml")$containers
+  data <- allBIOCONTAINER
 
   size <- length(data)
   
