@@ -57,7 +57,6 @@ server <- function( input, output, session) {
     }
     i = i + 1
   }
-  print(allBIOCONTAINER)
   
   hide("downloadContainerFile")
 

@@ -154,7 +154,7 @@ createContentFile <- function() {
             }
           }
           
-          print(listRCRAN)
+
           result <- paste(result, listRCRAN, sep = "\n")
         
              }}
@@ -190,35 +190,55 @@ createContentFile <- function() {
         
         result <- paste(result, "\n", sep = "\n")
         
-        
-        selectGITHUB <- allGITHUB[input$dtrgithubpackage_rows_all,]
-        selectGITHUB <- selectGITHUB[,"Package"]
-        
-        sizeGITHUB <- length(selectGITHUB)
-      
-        
-        if(!is.null(sizeGITHUB)) {
-          if(sizeGITHUB < length(allGITHUB[,"Package"])) { 
-          if(sizeGITHUB >= 1) { 
+        if(!is.null(input$rgithubpackagelist)) {
           
+          
+          selectGithub <- input$rgithubpackagelist
+          sizeGITHUB <- length(selectGithub)
+          
+          if(sizeGITHUB >= 1) {
+            
             listRGITHUB <- '\tR --slave -e "install_github(c('
             for (pkg in 1:sizeGITHUB){
-              if(pkg < sizeGITHUB) {
-                listRGITHUB <- paste0(listRGITHUB, '\'',selectGITHUB[pkg],'\', ')
-              } else {
-                listRGITHUB <- paste0(listRGITHUB, '\'',selectGITHUB[pkg],'\'))"')
-              }
+                      if(pkg < sizeGITHUB) {
+                        listRGITHUB <- paste0(listRGITHUB, '\'',selectGithub[pkg],'\', ')
+                      } else {
+                        listRGITHUB <- paste0(listRGITHUB, '\'',selectGithub[pkg],'\'))"')
+                      }
             }
             result <- paste(result, listRGITHUB, sep = "\n")
-            }
+            
           }
         }
+        
+        
+      #  selectGITHUB <- allGITHUB[input$dtrgithubpackage_rows_all,]
+      #  selectGITHUB <- selectGITHUB[,"Package"]
+        
+      #  sizeGITHUB <- length(selectGITHUB)
+      
+        
+      #  if(!is.null(sizeGITHUB)) {
+      #    if(sizeGITHUB < length(allGITHUB[,"Package"])) { 
+      #    if(sizeGITHUB >= 1) { 
+      #    
+      #      listRGITHUB <- '\tR --slave -e "install_github(c('
+      #      for (pkg in 1:sizeGITHUB){
+      #        if(pkg < sizeGITHUB) {
+      #          listRGITHUB <- paste0(listRGITHUB, '\'',selectGITHUB[pkg],'\', ')
+      #        } else {
+      #          listRGITHUB <- paste0(listRGITHUB, '\'',selectGITHUB[pkg],'\'))"')
+      #        }
+      #      }
+      #      result <- paste(result, listRGITHUB, sep = "\n")
+      #      }
+      #    }
+      # }
         
   
   } #END R
 
-  
-  print(input$selectedBiocontainer)
+
 
   if(!is.null(input$selectedBiocontainer)) {
     
@@ -336,28 +356,59 @@ observe({
   }
 })
 
-observeEvent(input$dtrgithubpackage_rows_selected, {
-  
-  
-  
-  selectGITHUB <- allGITHUB[input$dtrgithubpackage_rows_selected,]
-  selectGITHUB <- selectGITHUB[,"Package"]
-  
-  if(is.null(input$rgithubpackagelist)) {
-    element <- selectGITHUB
-  } else {
-    element <- selectGITHUB
-    
-    for(x in input$rgithubpackagelist) {
-      de <- list(Package=x)
-      element = rbind(element,de)
-    }
-    
-  }
-  
-  updateSelectizeInput(session,"rgithubpackagelist", choices = element, selected = element, options = list())
 
+observe({
+  if(is.null(input$dtrgithubpackage_rows_selected)) {
+    
+    selectGithub <- input$rgithubpackagelist
+    sizeGITHUB <- length(selectGithub)
+    
+    if(sizeGITHUB < 1) {
+      shinyjs::reset("formGithub")
+    }
+
+  } else {
+    i = 1
+    selectG <- list()
+    for(x in input$dtrgithubpackage_rows_selected) {
+      selectG[i] = toString(allGITHUB$Package[[x]])
+      i = i + 1
+    }
+    selectG <- c(unlist(selectG))
+    
+    selectGithub <- input$rgithubpackagelist
+    sizeGITHUB <- length(selectGithub)
+    
+    if(sizeGITHUB > 1) {
+      selectG <- c(selectG, selectGithub)
+    }
+  
+    updateSelectizeInput(session,"rgithubpackagelist", choices = selectG, selected = selectG, options = list())
+  }
 })
+
+#observeEvent(input$dtrgithubpackage_rows_selected, {
+#  
+#  
+#  
+#  selectGITHUB <- allGITHUB[input$dtrgithubpackage_rows_selected,]
+#  selectGITHUB <- selectGITHUB[,"Package"]
+#  
+#  if(is.null(input$rgithubpackagelist)) {
+#    element <- selectGITHUB
+#  } else {
+#    element <- selectGITHUB
+#    
+#    for(x in input$rgithubpackagelist) {
+#      de <- list(Package=x)
+#      element = rbind(element,de)
+#    }
+#    
+#  }
+#  
+#  updateSelectizeInput(session,"rgithubpackagelist", choices = element, selected = element, options = list())#
+#
+#})
 
 observeEvent(input$findGithub, {
   
