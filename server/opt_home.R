@@ -264,6 +264,7 @@ createContentFile <- function() {
     result <- paste0(result, "\n")
     
     result <- paste(result, "\tapt-get install -y  autotools-dev automake cmake curl grep sed dpkg fuse git zip openjdk-8-jre build-essential pkg-config python python-dev python-pip bzip2 ca-certificates libglib2.0-0 libxext6 libsm6 libxrender1 mercurial subversion zlib1g-dev", sep = "\n")
+    result <- paste(result, "\tapt-get update", sep = "\n")
     
     result <- paste0(result, "\n")
     
@@ -282,7 +283,7 @@ createContentFile <- function() {
     
     result <- paste0(result, "\n")
     
-    
+    result <- paste(result, "\tmkdir /opt/biotools", sep = "\n")
     result <- paste(result, "\tmkdir /opt/biotools/bin", sep = "\n")
     result <- paste(result, "\tchmod 777 -R /opt/biotools/", sep = "\n")
     result <- paste(result, "\texport PATH=/opt/biotools/bin:$PATH", sep = "\n")
