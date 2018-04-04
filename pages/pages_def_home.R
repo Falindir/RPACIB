@@ -23,14 +23,10 @@ tabHome = fluidPage(align="left",
                                actionButton("createContainer", label = "Create", icon("paper-plane"), style="color: #fff; background-color: #337ab7; border-color: #2e6da4"),
                                downloadButton('downloadContainerFile', label = "Dowload",  style="color: #fff; background-color: #337ab7; border-color: #2e6da4")
                                
-
-                            
-                               
-                               
                            )),
                     column(width = 10,
                            box(
-                             title = "R Packages",
+                             title = "Packages and tools",
                              width = NULL,
                              collapsible = TRUE,
                              solidHeader = TRUE,
@@ -40,16 +36,21 @@ tabHome = fluidPage(align="left",
                                             withSpinner(DT::dataTableOutput('dtrcranpackage'), type = 4, proxy.height = "150px")
                                           ),
                                           tabPanel('Bioconductor',   
-                                            DT::dataTableOutput('dtrbioconductorpackage')),
+                                            div(id = "formBioconductor",
+                                            #  br(),
+                                            #selectizeInput('selectedBioconductor', 'R Bioconductor selected:', choices = NULL, multiple=TRUE, options = list(maxItems = 30000)),
+                                            DT::dataTableOutput('dtrbioconductorpackage'))),
                                           tabPanel('Github',
                                             textInput("inputGithub", "Package name:", ""),
                                             actionButton("findGithub", label = "Find", icon("paper-plane"), style="color: #fff; background-color: #337ab7; border-color: #2e6da4"),
                                             div(id = "formGithub",
+                                            br(), br(),
                                             selectizeInput('rgithubpackagelist', 'R Github selected:', choices = NULL, multiple=TRUE, options = list(maxItems = 30000)),
                                             br(), br(),
                                             DT::dataTableOutput('dtrgithubpackage'))),
                                           tabPanel('BioContainer tools',
                                                    div(id = "formContainer",
+                                                       br(),
                                                    selectizeInput('selectedBiocontainer', 'Biocontainer tools selected:', choices = NULL, multiple=TRUE, options = list(maxItems = 30000))),
                                                    DT::dataTableOutput('dtbiocontainer')
                                                    )

@@ -165,29 +165,38 @@ createContentFile <- function() {
         
         selectBIO <- allBIO[input$dtrbioconductorpackage_rows_all,]
         selectBIO <- selectBIO[,"Package"]
-        sizeBIO <- length(selectBIO)
         
-        if(!is.null(sizeBIO)) {
-          if(sizeBIO < length(allBIO[,"Package"])) { 
-          if(sizeBIO >= 1) { 
-            
-            result <- paste(result, '\tR --slave -e "source(\'https://bioconductor.org/biocLite.R\'); \\', sep = "\n")
-            result <- paste(result, '\tbiocLite()"\n', sep = "\n")
-            
-        listRBIO <- '\tR --slave -e "source(\'https://bioconductor.org/biocLite.R\'); \\'
-        listRBIO <- paste0(listRBIO, "\n\tbiocLite(")
-        for (pkg in 1:sizeBIO){
-          if(pkg < sizeBIO) {
-            listRBIO <- paste0(listRBIO, '\'',selectBIO[pkg],'\', ')
-          } else {
-            listRBIO <- paste0(listRBIO, '\'',selectBIO[pkg],'\')"')
-          }
-        }
-        result <- paste(result, listRBIO, sep = "\n")
-          }
-          }
+       # if(!is.null(input$selectedBioconductor)) {
+        
+          #print(input$selectedBioconductor)
+          
+          sizeBIO <- length(selectBIO)
+          
+          if(!is.null(sizeBIO)) {
+            if(sizeBIO < length(allBIO[,"Package"])) { 
+              if(sizeBIO >= 1) { 
+                
+                result <- paste(result, '\tR --slave -e "source(\'https://bioconductor.org/biocLite.R\'); \\', sep = "\n")
+                result <- paste(result, '\tbiocLite()"\n', sep = "\n")
+                
+                listRBIO <- '\tR --slave -e "source(\'https://bioconductor.org/biocLite.R\'); \\'
+                listRBIO <- paste0(listRBIO, "\n\tbiocLite(")
+                for (pkg in 1:sizeBIO){
+                  if(pkg < sizeBIO) {
+                    listRBIO <- paste0(listRBIO, '\'',selectBIO[pkg],'\', ')
+                  } else {
+                    listRBIO <- paste0(listRBIO, '\'',selectBIO[pkg],'\')"')
+                  }
+                }
+                result <- paste(result, listRBIO, sep = "\n")
+              }
+            }
+         # }
+          
+          
         }
         
+  
         result <- paste(result, "\n", sep = "\n")
         
         if(!is.null(input$rgithubpackagelist)) {
