@@ -61,7 +61,7 @@ getBioconductorPackage <- function() {
   return(result)
 }
 
-getInstallToolPackageBioContainer <- function(tool) {
+getInstallToolPackageBioContainer <- function(tool, containerType) {
   
   data <- allBIOCONTAINER
 
@@ -76,7 +76,7 @@ getInstallToolPackageBioContainer <- function(tool) {
       
       if(tools$name == name) {
         if(tools$version == version) {
-          res <- paste0("\t", tools$install, collapse='\n' )
+            res <- paste0("\t", tools$install, collapse='\n' )
           return(res)
         }
       }

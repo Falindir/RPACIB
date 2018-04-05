@@ -33,242 +33,290 @@ output$dtbiocontainer <- DT::renderDataTable({
 
 
 
+createHeader <- function() {
+  
+  result <- ""
+  
+  if(input$containerType == "singularity") {
+    result <- "Bootstrap: docker"
+    result <- paste(result, "From: ubuntu:16.04", sep = "\n")
+    result <- paste(result, "IncludeCmd: yes", sep = "\n")
+  } else { # else docker
+    result <- "FROM ubuntu:16.04"
+  }
 
+  result <- paste0(result, "\n")
+  return(result)
+}
 
-createContentFile <- function() {
+createEnv <- function(result) {
   
-  haveR = FALSE
-  
-  result <- "Bootstrap: docker"
-  result <- paste(result, "From: ubuntu:16.04", sep = "\n")
-  result <- paste(result, "IncludeCmd: yes", sep = "\n")
-  
-  result <- paste(result, "\n", sep = "\n")
-  
-  if(input$rtemplate == "none") {
-    result <- paste(result, "%environment", sep = "\n")
+  if(input$containerType == "singularity") {
+      result <- paste(result, "%environment", sep = "\n")
     
-  } else if(input$rtemplate == "base") {
-    result <- paste(result, "%environment", sep = "\n")
-    result <- paste(result, "\tR_VERSION=3.2.5", sep = "\n")
-    result <- paste(result, "\texport R_VERSION", sep = "\n")
-    result <- paste(result, "\tR_CONFIG_DIR=/etc/R/", sep = "\n")
-    result <- paste(result, "\texport R_CONFIG_DIR", sep = "\n")
+      if(input$rtemplate == "none") {
+        
+      } else if(input$rtemplate == "base") {
+        result <- paste(result, "\tR_VERSION=3.2.5", sep = "\n")
+        result <- paste(result, "\texport R_VERSION", sep = "\n")
+        result <- paste(result, "\tR_CONFIG_DIR=/etc/R/", sep = "\n")
+        result <- paste(result, "\texport R_CONFIG_DIR", sep = "\n")
+      } else {
+        result <- paste(result, "\tR_VERSION=3.4.3", sep = "\n")
+        result <- paste(result, "\texport R_VERSION", sep = "\n")
+        result <- paste(result, "\tR_CONFIG_DIR=/etc/R/", sep = "\n")
+        result <- paste(result, "\texport R_CONFIG_DIR", sep = "\n")
+      }
+      
+      if(!is.null(input$dtbiocontainer_rows_all)) {
+        result <- paste(result, "\texport PATH=/opt/conda/bin:$PATH", sep = "\n")
+        result <- paste(result, "\texport PATH=/opt/biotools/bin:$PATH", sep = "\n")
+      }
   } else {
-    result <- paste(result, "%environment", sep = "\n")
-    result <- paste(result, "\tR_VERSION=3.4.3", sep = "\n")
-    result <- paste(result, "\texport R_VERSION", sep = "\n")
-    result <- paste(result, "\tR_CONFIG_DIR=/etc/R/", sep = "\n")
-    result <- paste(result, "\texport R_CONFIG_DIR", sep = "\n")
+      if(input$rtemplate == "none") {
+        
+      } else if(input$rtemplate == "base") {
+        result <- paste(result, "ENV R_VERSION=3.4.3", sep = "\n")
+        result <- paste(result, "RUN export R_VERSION", sep = "\n")
+        result <- paste(result, "ENV R_CONFIG_DIR=/etc/R/", sep = "\n")
+        result <- paste(result, "RUN export R_CONFIG_DIR", sep = "\n")
+        
+      } else {
+        result <- paste(result, "ENV R_VERSION=3.4.3", sep = "\n")
+        result <- paste(result, "RUN export R_VERSION", sep = "\n")
+        result <- paste(result, "ENV R_CONFIG_DIR=/etc/R/", sep = "\n")
+        result <- paste(result, "RUN export R_CONFIG_DIR", sep = "\n")
+      }
+      
+      if(!is.null(input$dtbiocontainer_rows_all)) {
+        result <- paste(result, "RUN export PATH=/opt/conda/bin:$PATH", sep = "\n")
+        result <- paste(result, "RUN export PATH=/opt/biotools/bin:$PATH", sep = "\n")
+      }
+  }
+
+  result <- paste0(result, "\n")
+  return(result)
+}
+
+createLabel <- function(result) {
+  
+    if(input$containerType == "singularity") {
+        result <- paste(result, "%labels", sep = "\n")
+        result <- paste(result, "\tAuthor Jimmy Lopez", sep = "\n")
+        result <- paste(result, "\tVersion v0.0.1", sep = "\n")
+        result <- paste0(result, "\n\tbuild_date ", format(Sys.time(), "%Y %b %d")) 
+    } else {
+      result <- paste(result, "LABEL Author Jimmy Lopez", sep = "\n")
+      result <- paste(result, "LABEL Version v0.0.1", sep = "\n")
+      result <- paste0(result, "\n", "LABEL build_date ", format(Sys.time(), "%Y %b %d")) 
+    }
+
+    result <- paste0(result, "\n")
+    return(result)
+}
+
+createExect <- function(result) {
+  
+    if(input$containerType == "singularity") {
+        result <- paste(result, "%apprun run", sep = "\n")
+        result <- paste(result, '\texec /bin/bash "$@"', sep = "\n")
+        result <- paste0(result, "\n")
+        result <- paste(result, "%runscript", sep = "\n")
+        result <- paste(result, '\texec /bin/bash "$@"', sep = "\n")
+    } else {
+        result <- paste(result, "CMD exec /bin/bash \"$@\"", sep = "\n")
+    }
+  
+    result <- paste0(result, "\n")
+    return(result)
+}
+
+createLibPrePost <- function(result) {
+  
+  if(input$containerType == "singularity") {
+      result <- paste(result, "%post", sep = "\n")
+      result <- paste(result, "\tapt-get update", sep = "\n")
+      result <- paste(result, "\tapt-get install -y wget libblas3 libblas-dev liblapack-dev liblapack3 curl", sep = "\n")
+      result <- paste(result, "\tapt-get install -y gcc fort77 aptitude", sep = "\n")
+      result <- paste(result, "\taptitude install -y g++ xorg-dev libreadline-dev  gfortran", sep = "\n")
+      result <- paste(result, "\tapt-get install -y libssl-dev libxml2-dev libpcre3-dev liblzma-dev libbz2-dev libcurl4-openssl-dev", sep = "\n")
+      result <- paste(result, "\tapt-get update", sep = "\n")
+  } else {
+      result <- paste(result, "RUN apt-get update", sep = "\n")
+      result <- paste(result, "RUN apt-get install -y wget libblas3 libblas-dev liblapack-dev liblapack3 curl", sep = "\n")
+      result <- paste(result, "RUN apt-get install -y gcc fort77 aptitude", sep = "\n")
+      result <- paste(result, "RUN aptitude install -y g++ xorg-dev libreadline-dev  gfortran", sep = "\n")
+      result <- paste(result, "RUN apt-get install -y libssl-dev libxml2-dev libpcre3-dev liblzma-dev libbz2-dev libcurl4-openssl-dev openjdk-8-jre", sep = "\n")
+      result <- paste(result, "RUN apt-get update", sep = "\n")
   }
   
-  if(!is.null(input$dtbiocontainer_rows_all)) {
-    result <- paste(result, "\texport PATH=/opt/conda/bin:$PATH", sep = "\n")
-    result <- paste(result, "\texport PATH=/opt/biotools/bin:$PATH", sep = "\n")
+  result <- paste0(result, "\n")
+  return(result)
+}
+
+createRBase <- function(result) {
+  
+  if(input$containerType == "singularity") {
+      result <- paste(result, "\tapt-get install -y r-base r-base-dev", sep = "\n")
+  } else {
+    result <- paste(result, "RUN apt-get install -y r-base r-base-dev", sep = "\n")
   }
   
+  result <- paste0(result, "\n")
+  return(result)
+}
 
+createRSource <- function(result) {
   
-  result <- paste(result, "\n", sep = "\n")
+  if(input$containerType == "singularity") {
+      result <- paste(result, '\tcd $HOME', sep = "\n")
+      result <- paste(result, '\twget https://cran.rstudio.com/src/base/R-3/R-3.4.3.tar.gz', sep = "\n")
+      result <- paste(result, '\ttar xvf R-3.4.3.tar.gz', sep = "\n")
+      result <- paste(result, '\tcd R-3.4.3', sep = "\n")
+      result <- paste(result, "\t./configure --enable-R-static-lib --with-blas --with-lapack --enable-R-shlib=yes ", sep = "\n") 
+      result <- paste(result, "\tmake", sep = "\n") 
+      result <- paste(result, "\tmake install", sep = "\n") 
+  } else {
+    result <- paste(result, 'RUN cd $HOME \\', sep = "\n")
+    result <- paste(result, '\t&& wget https://cran.rstudio.com/src/base/R-3/R-3.4.3.tar.gz \\', sep = "\n")
+    result <- paste(result, '\t&& tar xvf R-3.4.3.tar.gz \\', sep = "\n")
+    result <- paste(result, '\t&& cd R-3.4.3 \\' , sep = "\n")
+    result <- paste(result, "\t&& ./configure --enable-R-static-lib --with-blas --with-lapack --enable-R-shlib=yes \\", sep = "\n") 
+    result <- paste(result, "\t&& make \\", sep = "\n") 
+    result <- paste(result, "\t&& make install \\", sep = "\n") 
+  }
   
-  result <- paste(result, "%labels", sep = "\n")
-  result <- paste(result, "\tAuthor Jimmy Lopez", sep = "\n")
-  result <- paste(result, "\tVersion v0.0.1", sep = "\n")
-  result <- paste0(result, "\n\tbuild_date ", format(Sys.time(), "%Y %b %d"), "\n")
-  
-  result <- paste(result, "\n", sep = "\n")
-  
-  result <- paste(result, "%apprun run", sep = "\n")
-  result <- paste(result, '\texec /bin/bash "$@"', sep = "\n")
-  
-  result <- paste(result, "\n", sep = "\n")
-  #result <- paste(result, "%apprun Rscript", sep = "\n")
-  #result <- paste(result, '\texec Rscript "$@"', sep = "\n")
-  #result <- paste(result, "\n", sep = "\n")
-  
-  result <- paste(result, "%runscript", sep = "\n")
-  #result <- paste(result, '\texec R "$@"', sep = "\n")
-  result <- paste(result, '\texec /bin/bash "$@"', sep = "\n")
-  
-  result <- paste(result, "\n", sep = "\n")
-  
-  result <- paste(result, "%post", sep = "\n")
-  result <- paste(result, "\tapt-get update", sep = "\n")
-  result <- paste(result, "\tapt-get install -y wget libblas3 libblas-dev liblapack-dev liblapack3 curl", sep = "\n")
-  result <- paste(result, "\tapt-get install -y gcc fort77 aptitude", sep = "\n")
-  result <- paste(result, "\taptitude install -y g++ xorg-dev libreadline-dev  gfortran", sep = "\n")
-  result <- paste(result, "\tapt-get install -y libssl-dev libxml2-dev libpcre3-dev liblzma-dev libbz2-dev libcurl4-openssl-dev", sep = "\n")
-  result <- paste(result, "\tapt-get update", sep = "\n")
-  
-  result <- paste(result, "\n", sep = "")
-  
-  
-  if(input$rtemplate != "none") {
-    
-        haveR = TRUE
-    
-        if(input$rtemplate == "source") {
-          result <- paste(result, '\tcd $HOME', sep = "\n")
-          result <- paste(result, '\twget https://cran.rstudio.com/src/base/R-3/R-3.4.3.tar.gz', sep = "\n")
-          result <- paste(result, '\ttar xvf R-3.4.3.tar.gz', sep = "\n")
-          result <- paste(result, '\tcd R-3.4.3', sep = "\n")
-          result <- paste(result, "\t./configure --enable-R-static-lib --with-blas --with-lapack --enable-R-shlib=yes ", sep = "\n") 
-          result <- paste(result, "\tmake", sep = "\n") 
-          result <- paste(result, "\tmake install", sep = "\n") 
-          
-        } else if(input$rtemplate == "base") {
-          
-          result <- paste(result, "\tapt-get install -y r-base r-base-dev", sep = "\n")
-          
-        } else if(input$rtemplate == "cran") {
-          
-          result <- paste(result, "\tapt-get install -y software-properties-common", sep = "\n")
-          result <- paste(result, "\tadd-apt-repository 'deb http://cloud.r-project.org/bin/linux/ubuntu xenial/'", sep = "\n")
-          result <- paste(result, "\tapt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9", sep = "\n")
-          result <- paste(result, "\tapt-get update", sep = "\n")
-          result <- paste(result, "\tapt-get install -y r-base r-base-dev", sep = "\n")
+  result <- paste0(result, "\n")
+  return(result)
+}
 
-        }
+createRCran <- function(result) {
   
+  if(input$containerType == "singularity") {
+      result <- paste(result, "\tapt-get install -y software-properties-common", sep = "\n")
+      result <- paste(result, "\tadd-apt-repository 'deb http://cloud.r-project.org/bin/linux/ubuntu xenial/'", sep = "\n")
+      result <- paste(result, "\tapt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9", sep = "\n")
+      result <- paste(result, "\tapt-get update", sep = "\n")
+      result <- paste(result, "\tapt-get install -y r-base r-base-dev", sep = "\n")
+  } else {
+      result <- paste(result, "RUN apt-get install -y software-properties-common", sep = "\n")
+      result <- paste(result, "RUN add-apt-repository 'deb http://cloud.r-project.org/bin/linux/ubuntu xenial/'", sep = "\n")
+      result <- paste(result, "RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9", sep = "\n")
+      result <- paste(result, "RUN apt-get update", sep = "\n")
+      result <- paste(result, "RUN apt-get install -y r-base r-base-dev", sep = "\n")
+  }
+  
+  result <- paste0(result, "\n")
+  return(result)
+}
 
+createCRANPackage <- function(result) {
   
-        result <- paste(result, "\n", sep = "\n")
+  selectCRAN <- allCRAN[input$dtrcranpackage_rows_all,]
+  selectCRAN <- selectCRAN[,"Package"]
+  sizeCRAN <- length(selectCRAN)
+  
+  
+  if(!is.null(sizeCRAN)) {
+    if(sizeCRAN < length(allCRAN[,"Package"])) { 
+      if(sizeCRAN >= 1) { 
         
-        selectCRAN <- allCRAN[input$dtrcranpackage_rows_all,]
-        selectCRAN <- selectCRAN[,"Package"]
-        
-        
-        sizeCRAN <- length(selectCRAN)
-        
-        
-        
-           if(!is.null(sizeCRAN)) {
-             if(sizeCRAN < length(allCRAN[,"Package"])) { 
-             if(sizeCRAN >= 1) { 
+        if(input$containerType == "singularity") {
           listRCRAN <- '\techo install.packages\\(c('
-          for (pkg in 1:sizeCRAN){
-            if(pkg < sizeCRAN) {
-              listRCRAN <- paste0(listRCRAN, '"',selectCRAN[pkg],'", ')
-            } else {
-              listRCRAN <- paste0(listRCRAN, '"',selectCRAN[pkg],'"), repos\\=\'https://cloud.r-project.org\'\\) | R --slave ')
-            }
-          }
-          
-
-          result <- paste(result, listRCRAN, sep = "\n")
-        
-             }}
-           }
-        result <- paste(result, "\n", sep = "\n")
-        
-      
-        
-        selectBIO <- allBIO[input$dtrbioconductorpackage_rows_all,]
-        selectBIO <- selectBIO[,"Package"]
-        
-       # if(!is.null(input$selectedBioconductor)) {
-        
-          #print(input$selectedBioconductor)
-          
-          sizeBIO <- length(selectBIO)
-          
-          if(!is.null(sizeBIO)) {
-            if(sizeBIO < length(allBIO[,"Package"])) { 
-              if(sizeBIO >= 1) { 
-                
-                result <- paste(result, '\tR --slave -e "source(\'https://bioconductor.org/biocLite.R\'); \\', sep = "\n")
-                result <- paste(result, '\tbiocLite()"\n', sep = "\n")
-                
-                listRBIO <- '\tR --slave -e "source(\'https://bioconductor.org/biocLite.R\'); \\'
-                listRBIO <- paste0(listRBIO, "\n\tbiocLite(")
-                for (pkg in 1:sizeBIO){
-                  if(pkg < sizeBIO) {
-                    listRBIO <- paste0(listRBIO, '\'',selectBIO[pkg],'\', ')
-                  } else {
-                    listRBIO <- paste0(listRBIO, '\'',selectBIO[pkg],'\')"')
-                  }
-                }
-                result <- paste(result, listRBIO, sep = "\n")
-              }
-            }
-         # }
-          
-          
+        } else {
+          listRCRAN <- 'RUN echo install.packages\\(c('
         }
         
-  
-        result <- paste(result, "\n", sep = "\n")
-        
-        if(!is.null(input$rgithubpackagelist)) {
-          
-          
-          selectGithub <- input$rgithubpackagelist
-          sizeGITHUB <- length(selectGithub)
-          
-          if(sizeGITHUB >= 1) {
-            
-            listRGITHUB <- '\tR --slave -e "install_github(c('
-            for (pkg in 1:sizeGITHUB){
-                      if(pkg < sizeGITHUB) {
-                        listRGITHUB <- paste0(listRGITHUB, '\'',selectGithub[pkg],'\', ')
-                      } else {
-                        listRGITHUB <- paste0(listRGITHUB, '\'',selectGithub[pkg],'\'))"')
-                      }
-            }
-            result <- paste(result, listRGITHUB, sep = "\n")
-            
+        for (pkg in 1:sizeCRAN){
+          if(pkg < sizeCRAN) {
+            listRCRAN <- paste0(listRCRAN, '"',selectCRAN[pkg],'", ')
+          } else {
+            listRCRAN <- paste0(listRCRAN, '"',selectCRAN[pkg],'"), repos\\=\'https://cloud.r-project.org\'\\) | R --slave ')
           }
         }
         
-        
-      #  selectGITHUB <- allGITHUB[input$dtrgithubpackage_rows_all,]
-      #  selectGITHUB <- selectGITHUB[,"Package"]
-        
-      #  sizeGITHUB <- length(selectGITHUB)
-      
-        
-      #  if(!is.null(sizeGITHUB)) {
-      #    if(sizeGITHUB < length(allGITHUB[,"Package"])) { 
-      #    if(sizeGITHUB >= 1) { 
-      #    
-      #      listRGITHUB <- '\tR --slave -e "install_github(c('
-      #      for (pkg in 1:sizeGITHUB){
-      #        if(pkg < sizeGITHUB) {
-      #          listRGITHUB <- paste0(listRGITHUB, '\'',selectGITHUB[pkg],'\', ')
-      #        } else {
-      #          listRGITHUB <- paste0(listRGITHUB, '\'',selectGITHUB[pkg],'\'))"')
-      #        }
-      #      }
-      #      result <- paste(result, listRGITHUB, sep = "\n")
-      #      }
-      #    }
-      # }
-        
+        result <- paste(result, listRCRAN, sep = "\n")
+        result <- paste0(result, "\n")
+      }
+    }
+  }
   
-  } #END R
+  return(result)
+}
 
-
-
-  if(!is.null(input$selectedBiocontainer)) {
+createGithubPackage <- function(result) {
+  
+  if(!is.null(input$rgithubpackagelist)) {
+  
+    selectGithub <- input$rgithubpackagelist
+    sizeGITHUB <- length(selectGithub)
     
+    if(sizeGITHUB >= 1) {
+      
+      if(input$containerType == "singularity") {
+        listRGITHUB <- '\tR --slave -e "install_github(c('
+      } else {
+        listRGITHUB <- 'RUN R --slave -e "install_github(c('
+      }
+      
+      
+      for (pkg in 1:sizeGITHUB){
+        if(pkg < sizeGITHUB) {
+          listRGITHUB <- paste0(listRGITHUB, '\'',selectGithub[pkg],'\', ')
+        } else {
+          listRGITHUB <- paste0(listRGITHUB, '\'',selectGithub[pkg],'\'))"')
+        }
+      }
+      result <- paste(result, listRGITHUB, sep = "\n")
+      
+    }
+  }
+  
 
+  
+  result <- paste0(result, "\n")
+  return(result)
+}
 
-    
+createBioconductorPackage <- function(result) {
+  
+  selectBIO <- allBIO[input$dtrbioconductorpackage_rows_all,]
+  selectBIO <- selectBIO[,"Package"]
+  sizeBIO <- length(selectBIO)
+  
+  if(!is.null(sizeBIO)) {
+    if(sizeBIO < length(allBIO[,"Package"])) { 
+      if(sizeBIO >= 1) { 
+        
+        if(input$containerType == "singularity") {
+          result <- paste(result, '\tR --slave -e "source(\'https://bioconductor.org/biocLite.R\'); biocLite(); "', sep = "\n")
+          listRBIO <- '\tR --slave -e "source(\'https://bioconductor.org/biocLite.R\'); biocLite(\\'
+        } else {
+          result <- paste(result, 'RUN R --slave -e "source(\'https://bioconductor.org/biocLite.R\'); biocLite(); "', sep = "\n")
+          listRBIO <- 'RUN R --slave -e "source(\'https://bioconductor.org/biocLite.R\'); biocLite(\\'
+        }
+      
+        for (pkg in 1:sizeBIO){
+          if(pkg < sizeBIO) {
+            listRBIO <- paste0(listRBIO, '\'',selectBIO[pkg],'\', ')
+          } else {
+            listRBIO <- paste0(listRBIO, '\'',selectBIO[pkg],'\')"')
+          }
+        }
+        
+        result <- paste(result, listRBIO, sep = "\n")
+        result <- paste0(result, "\n")
+      }
+    }
+  }
+  
+  return(result)
+}
 
-  #if(!is.null(input$dtbiocontainer_rows_all)) {
-    
-    #biotools = getBioconductorPackage() 
-    
-    #selectBioTool <- biotools[input$dtbiocontainer_rows_all,]
+createBiocontainer <- function(result, haveR) {
+
+  if(input$containerType == "singularity") {
     selectBioTool <- input$selectedBiocontainer
-    
-    #result <- paste(result, "\tmv /etc/apt/sources.list /etc/apt/sources.list.bkp && \\",
-    #                "\techo -e \"deb mirror://mirrors.ubuntu.com/mirrors.txt xenial main restricted universe multiverse\\n\\ ",
-    #                "\tdeb mirror://mirrors.ubuntu.com/mirrors.txt xenial-updates main restricted universe multiverse\\n\\ ",
-    #                "\tdeb mirror://mirrors.ubuntu.com/mirrors.txt xenial-backports main restricted universe multiverse\\n\\ ",
-    #                "\tdeb mirror://mirrors.ubuntu.com/mirrors.txt xenial-security main restricted universe multiverse\\n\\n\\\" > /etc/apt/sources.list && \\ ",
-    #                "\tcat /etc/apt/sources.list.bkp >> /etc/apt/sources.list && \\ ",
-    #                "\tcat /etc/apt/sources.list", sep = "\n")
     
     result <- paste0(result, "\n")
     
@@ -278,17 +326,17 @@ createContentFile <- function() {
     result <- paste0(result, "\n")
     
     result <- paste(result, "\techo \'export PATH=/opt/conda/bin:$PATH\' > /etc/profile.d/conda.sh && \\",
-    "\twget --quiet https://repo.continuum.io/miniconda/Miniconda2-4.0.5-Linux-x86_64.sh -O ~/miniconda.sh && \\",
-    "\t/bin/bash ~/miniconda.sh -b -p /opt/conda && \\",
-    "\trm ~/miniconda.sh", sep = "\n")
+                    "\twget --quiet https://repo.continuum.io/miniconda/Miniconda2-4.0.5-Linux-x86_64.sh -O ~/miniconda.sh && \\",
+                    "\t/bin/bash ~/miniconda.sh -b -p /opt/conda && \\",
+                    "\trm ~/miniconda.sh", sep = "\n")
     
     result <- paste0(result, "\n")
-
+    
     result <- paste(result, "\tTINI_VERSION=`curl https://github.com/krallin/tini/releases/latest | grep -o \"/v.*\\\"\" | sed \'s:^..\\(.*\\).$:\\1:\'` && \\",
-    "\tcurl -L \"https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini_${TINI_VERSION}.deb\" > tini.deb && \\",
-    "\tdpkg -i tini.deb && \\",
-    "\trm tini.deb && \\",
-    "\tapt-get clean", sep = "\n")
+                    "\tcurl -L \"https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini_${TINI_VERSION}.deb\" > tini.deb && \\",
+                    "\tdpkg -i tini.deb && \\",
+                    "\trm tini.deb && \\",
+                    "\tapt-get clean", sep = "\n")
     
     result <- paste0(result, "\n")
     
@@ -299,7 +347,6 @@ createContentFile <- function() {
     
     result <- paste(result, "\tchmod 777 -R /opt/conda/", sep = "\n")
     result <- paste(result, "\texport PATH=/opt/conda/bin:$PATH", sep = "\n")
-    #result <- paste(result, "\techo 'export PATH=/opt/conda/bin:$PATH' >> $SINGULARITY_ENVIRONMENT", sep = "\n")
     
     if(!haveR) {
       result <- paste(result, "\tconda config --add channels r", sep = "\n")
@@ -311,17 +358,94 @@ createContentFile <- function() {
     result <- paste0(result, "\n")
     
     for (tool in selectBioTool){
-      
-      
-        
-      result <- paste(result, getInstallToolPackageBioContainer(tool), sep="\n\n")
-      
+      result <- paste(result, getInstallToolPackageBioContainer(tool, input$containerType), sep="\n\n")
+    }
+  } else {
+    selectBioTool <- input$selectedBiocontainer
+    
+    result <- paste0(result, "\n")
+    
+    result <- paste(result, "RUN apt-get install -y  autotools-dev automake cmake curl grep sed dpkg fuse git zip openjdk-8-jre build-essential pkg-config python python-dev python-pip bzip2 ca-certificates libglib2.0-0 libxext6 libsm6 libxrender1 mercurial subversion zlib1g-dev", sep = "\n")
+    result <- paste(result, "RUN apt-get update", sep = "\n")
+    
+    result <- paste0(result, "\n")
+    
+    result <- paste(result, "RUN echo \'export PATH=/opt/conda/bin:$PATH\' > /etc/profile.d/conda.sh && \\",
+                    "\twget --quiet https://repo.continuum.io/miniconda/Miniconda2-4.0.5-Linux-x86_64.sh -O ~/miniconda.sh && \\",
+                    "\t/bin/bash ~/miniconda.sh -b -p /opt/conda && \\",
+                    "\trm ~/miniconda.sh", sep = "\n")
+    
+    result <- paste0(result, "\n")
+    
+    result <- paste(result, "RUN TINI_VERSION=`curl https://github.com/krallin/tini/releases/latest | grep -o \"/v.*\\\"\" | sed \'s:^..\\(.*\\).$:\\1:\'` && \\",
+                    "\tcurl -L \"https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini_${TINI_VERSION}.deb\" > tini.deb && \\",
+                    "\tdpkg -i tini.deb && \\",
+                    "\trm tini.deb && \\",
+                    "\tapt-get clean", sep = "\n")
+    
+    result <- paste0(result, "\n")
+    
+    result <- paste(result, "RUN mkdir /opt/biotools", sep = "\n")
+    result <- paste(result, "RUN mkdir /opt/biotools/bin", sep = "\n")
+    result <- paste(result, "RUN chmod 777 -R /opt/biotools/", sep = "\n")
+    result <- paste(result, "RUN export PATH=/opt/biotools/bin:$PATH", sep = "\n")
+    
+    result <- paste(result, "RUN chmod 777 -R /opt/conda/", sep = "\n")
+    result <- paste(result, "RUN export PATH=/opt/conda/bin:$PATH", sep = "\n")
+    
+    if(!haveR) {
+      result <- paste(result, "RUN conda config --add channels r", sep = "\n")
+    }
+    
+    result <- paste(result, "RUN conda config --add channels bioconda", sep = "\n")
+    result <- paste(result, "RUN conda upgrade conda", sep = "\n")
+    
+    result <- paste0(result, "\n")
+    
+    for (tool in selectBioTool){
+      result <- paste0(result, "\nRUN ", getInstallToolPackageBioContainer(tool, input$containerType))
     }
     
   }
   
+    result <- paste0(result, "\n")
+    return(result)
+}
+
+createContentFile <- function() {
+  
+  haveR = FALSE
+
+  result <- createHeader()
+  result <- createEnv(result)
+  result <- createLabel(result)
+  result <- createLibPrePost(result)
+
+  if(input$rtemplate != "none") {
+    
+      haveR = TRUE
+    
+      if(input$rtemplate == "source") {
+          result <- createRSource(result)
+      } else if(input$rtemplate == "base") {
+          result <- createRBase(result)
+      } else if(input$rtemplate == "cran") {
+          result <- createRCran(result)
+      }
+      
+      result <- createCRANPackage(result)
+      result <- createBioconductorPackage(result)
+      result <- createGithubPackage(result)
+  } 
+
+  if(!is.null(input$selectedBiocontainer)) {
+    result <- createBiocontainer(result, haveR)
+  }
+  
+  result <- createExect(result)
   
   result <- paste(result, input$customDataContainer, sep = "\t\n")
+  
   return(result)
 }
 
@@ -342,7 +466,12 @@ output$previewContainer <- renderText({
 
 output$downloadContainerFile <- downloadHandler(
   filename = function() {
-    paste("Singularity",input$imageName, sep = ".")
+    name <- ""
+    if(input$containerType == "singularity") {
+      name <- paste("Singularity",input$imageName, sep = ".")
+    } else {
+      name <- paste("Dockerfile",input$imageName, sep = ".")
+    }
   },
   content = function(file) {
     result <- createContentFile()
@@ -397,33 +526,9 @@ observe({
   }
 })
 
-#observeEvent(input$dtrgithubpackage_rows_selected, {
-#  
-#  
-#  
-#  selectGITHUB <- allGITHUB[input$dtrgithubpackage_rows_selected,]
-#  selectGITHUB <- selectGITHUB[,"Package"]
-#  
-#  if(is.null(input$rgithubpackagelist)) {
-#    element <- selectGITHUB
-#  } else {
-#    element <- selectGITHUB
-#    
-#    for(x in input$rgithubpackagelist) {
-#      de <- list(Package=x)
-#      element = rbind(element,de)
-#    }
-#    
-#  }
-#  
-#  updateSelectizeInput(session,"rgithubpackagelist", choices = element, selected = element, options = list())#
-#
-#})
-
 observeEvent(input$findGithub, {
   
   name <- input$inputGithub
-  
   
   if(!stri_isempty(name)) {
     allGITHUB <<- data.frame(Package = gh_suggest(name, keep_title = FALSE), Title = attr(gh_suggest(name, keep_title = TRUE), "title"))

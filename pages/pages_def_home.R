@@ -10,7 +10,7 @@ tabHome = fluidPage(align="left",
                                
                                textInput("imageName", "Image Name", ""),
                                br(),
-                               radioButtons("containerType", "Container type:", choices = list("Singularity" = "singularity"), selected = "singularity"),
+                               radioButtons("containerType", "Container type:", choices = list("Singularity" = "singularity", "Docker" = "docker"), selected = "singularity"),
                                br(),
                                #selectizeInput('rcranpackagelist', 'R CRAN:', choices = NULL, multiple=TRUE, options = list(maxItems = 30000)),
                                selectizeInput('rtemplate', 'R origin:', choices = c(`None` = 'none', `R from source` = 'source', `R from r-base` = 'base', `R from CRAN depo` = 'cran'), selected = "source", multiple = FALSE),
