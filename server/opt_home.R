@@ -148,6 +148,8 @@ createLibPrePost <- function(result) {
       result <- paste(result, "RUN aptitude install -y g++ xorg-dev libreadline-dev  gfortran", sep = "\n")
       result <- paste(result, "RUN apt-get install -y libssl-dev libxml2-dev libpcre3-dev liblzma-dev libbz2-dev libcurl4-openssl-dev openjdk-8-jre", sep = "\n")
       result <- paste(result, "RUN apt-get update", sep = "\n")
+      result <- paste(result, "ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64", sep = "\n")
+      
   }
   
   result <- paste0(result, "\n")
