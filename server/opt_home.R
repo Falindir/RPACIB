@@ -390,10 +390,10 @@ createBiocontainer <- function(result, haveR) {
     result <- paste(result, "RUN mkdir /opt/biotools", sep = "\n")
     result <- paste(result, "RUN mkdir /opt/biotools/bin", sep = "\n")
     result <- paste(result, "RUN chmod 777 -R /opt/biotools/", sep = "\n")
-    result <- paste(result, "RUN export PATH=/opt/biotools/bin:$PATH", sep = "\n")
+    result <- paste(result, "ENV PATH=/opt/biotools/bin:${PATH}", sep = "\n")
     
     result <- paste(result, "RUN chmod 777 -R /opt/conda/", sep = "\n")
-    result <- paste(result, "RUN export PATH=/opt/conda/bin:$PATH", sep = "\n")
+    result <- paste(result, "ENV PATH=/opt/conda/bin:${PATH}", sep = "\n")
     
     if(!haveR) {
       result <- paste(result, "RUN conda config --add channels r", sep = "\n")
