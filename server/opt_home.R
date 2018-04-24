@@ -51,6 +51,13 @@ createHeader <- function() {
 
 createEnv <- function(result) {
   
+  Rversion = "3.4.3" 
+  if(input$rtemplate == "source2") {
+    Rversion = "3.4.4" 
+  }else if(input$rtemplate == "source3") {
+    Rversion = "3.5.0" 
+  }
+  
   if(input$containerType == "singularity") {
       result <- paste(result, "%environment", sep = "\n")
     
@@ -62,7 +69,8 @@ createEnv <- function(result) {
         result <- paste(result, "\tR_CONFIG_DIR=/etc/R/", sep = "\n")
         result <- paste(result, "\texport R_CONFIG_DIR", sep = "\n")
       } else {
-        result <- paste(result, "\tR_VERSION=3.4.3", sep = "\n")
+
+        result <- paste0(result, "\n\tR_VERSION=", Rversion)
         result <- paste(result, "\texport R_VERSION", sep = "\n")
         result <- paste(result, "\tR_CONFIG_DIR=/etc/R/", sep = "\n")
         result <- paste(result, "\texport R_CONFIG_DIR", sep = "\n")
@@ -76,7 +84,7 @@ createEnv <- function(result) {
       if(input$rtemplate == "none") {
         
       } else if(input$rtemplate == "base") {
-        result <- paste(result, "ENV R_VERSION=3.4.3", sep = "\n")
+        result <- paste0(result, "ENV R_VERSION=", Rversion)
         result <- paste(result, "RUN export R_VERSION", sep = "\n")
         result <- paste(result, "ENV R_CONFIG_DIR=/etc/R/", sep = "\n")
         result <- paste(result, "RUN export R_CONFIG_DIR", sep = "\n")
