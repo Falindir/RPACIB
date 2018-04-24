@@ -13,7 +13,7 @@ tabHome = fluidPage(align="left",
                                radioButtons("containerType", "Container type:", choices = list("Singularity" = "singularity", "Docker" = "docker"), selected = "singularity"),
                                br(),
                                #selectizeInput('rcranpackagelist', 'R CRAN:', choices = NULL, multiple=TRUE, options = list(maxItems = 30000)),
-                               selectizeInput('rtemplate', 'R origin:', choices = c(`None` = 'none', `R from source` = 'source', `R from r-base` = 'base', `R from CRAN depo` = 'cran'), selected = "source", multiple = FALSE),
+                               selectizeInput('rtemplate', 'R origin:', choices = c(`None` = 'none', `R from source 3.4.3` = 'source', `R from source 3.4.4` = 'source2', `R from source 3.5.0` = 'source3', `R from r-base` = 'base', `R from CRAN depo` = 'cran'), selected = "source", multiple = FALSE),
                                #selectizeInput('biocontainers', 'BioContainers tools :', choices = getBioconductorPackage(), multiple = TRUE),
                                
                                
@@ -26,6 +26,7 @@ tabHome = fluidPage(align="left",
                            )),
                     column(width = 10,
                            box(
+                             id = "boxPackage",
                              title = "Packages and tools",
                              width = NULL,
                              collapsible = TRUE,

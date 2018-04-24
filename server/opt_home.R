@@ -102,11 +102,11 @@ createLabel <- function(result) {
   
     if(input$containerType == "singularity") {
         result <- paste(result, "%labels", sep = "\n")
-        result <- paste(result, "\tAuthor Jimmy Lopez", sep = "\n")
+        result <- paste(result, "\tAuthor YourName", sep = "\n")
         result <- paste(result, "\tVersion v0.0.1", sep = "\n")
         result <- paste0(result, "\n\tbuild_date ", format(Sys.time(), "%Y %b %d")) 
     } else {
-      result <- paste(result, "LABEL Author Jimmy Lopez", sep = "\n")
+      result <- paste(result, "LABEL Author YourName", sep = "\n")
       result <- paste(result, "LABEL Version v0.0.1", sep = "\n")
       result <- paste0(result, "\n", "LABEL build_date ", format(Sys.time(), "%Y %b %d")) 
     }
@@ -158,6 +158,8 @@ createLibPrePost <- function(result) {
 
 createRBase <- function(result) {
   
+  result <- paste(result, '############### Install R From RBase ##############', sep = "\n")
+  
   if(input$containerType == "singularity") {
       result <- paste(result, "\tapt-get install -y r-base r-base-dev", sep = "\n")
   } else {
@@ -168,21 +170,23 @@ createRBase <- function(result) {
   return(result)
 }
 
-createRSource <- function(result) {
+createRSource <- function(result, Rversion) {
+  
+  result <- paste(result, '############### Install R From Source ##############', sep = "\n")
   
   if(input$containerType == "singularity") {
       result <- paste(result, '\tcd $HOME', sep = "\n")
-      result <- paste(result, '\twget https://cran.rstudio.com/src/base/R-3/R-3.4.3.tar.gz', sep = "\n")
-      result <- paste(result, '\ttar xvf R-3.4.3.tar.gz', sep = "\n")
-      result <- paste(result, '\tcd R-3.4.3', sep = "\n")
+      result <- paste0(result, '\n\twget https://cran.rstudio.com/src/base/R-3/R-', Rversion, '.tar.gz')
+      result <- paste0(result, '\n\ttar xvf R-', Rversion, '.tar.gz')
+      result <- paste0(result, '\n\tcd R-', Rversion)
       result <- paste(result, "\t./configure --enable-R-static-lib --with-blas --with-lapack --enable-R-shlib=yes ", sep = "\n") 
       result <- paste(result, "\tmake", sep = "\n") 
       result <- paste(result, "\tmake install", sep = "\n") 
   } else {
     result <- paste(result, 'RUN cd $HOME \\', sep = "\n")
-    result <- paste(result, '\t&& wget https://cran.rstudio.com/src/base/R-3/R-3.4.3.tar.gz \\', sep = "\n")
-    result <- paste(result, '\t&& tar xvf R-3.4.3.tar.gz \\', sep = "\n")
-    result <- paste(result, '\t&& cd R-3.4.3 \\' , sep = "\n")
+    result <- paste0(result, '\n\t&& wget https://cran.rstudio.com/src/base/R-3/R-', Rversion, '.tar.gz \\')
+    result <- paste0(result, '\n\t&& tar xvf R-', Rversion, '.tar.gz \\')
+    result <- paste0(result, '\n\t&& cd R-', Rversion, ' \\')
     result <- paste(result, "\t&& ./configure --enable-R-static-lib --with-blas --with-lapack --enable-R-shlib=yes \\", sep = "\n") 
     result <- paste(result, "\t&& make \\", sep = "\n") 
     result <- paste(result, "\t&& make install \\", sep = "\n") 
@@ -193,6 +197,8 @@ createRSource <- function(result) {
 }
 
 createRCran <- function(result) {
+  
+  result <- paste(result, '############### Install R From CRAN ##############', sep = "\n")
   
   if(input$containerType == "singularity") {
       result <- paste(result, "\tapt-get install -y software-properties-common", sep = "\n")
@@ -214,6 +220,8 @@ createRCran <- function(result) {
 
 createCRANPackage <- function(result) {
   
+  
+  
   selectCRAN <- allCRAN[input$dtrcranpackage_rows_all,]
   selectCRAN <- selectCRAN[,"Package"]
   sizeCRAN <- length(selectCRAN)
@@ -222,6 +230,8 @@ createCRANPackage <- function(result) {
   if(!is.null(sizeCRAN)) {
     if(sizeCRAN < length(allCRAN[,"Package"])) { 
       if(sizeCRAN >= 1) { 
+        
+        result <- paste(result, '############### Install CRAN Package ##############', sep = "\n")
         
         if(input$containerType == "singularity") {
           listRCRAN <- '\techo install.packages\\(c('
@@ -254,6 +264,9 @@ createGithubPackage <- function(result) {
     sizeGITHUB <- length(selectGithub)
     
     if(sizeGITHUB >= 1) {
+      
+      result <- paste(result, '############### Install Github Package ##############', sep = "\n")
+      
       
       if(input$containerType == "singularity") {
         listRGITHUB <- '\tR --slave -e "install_github(c('
@@ -289,6 +302,9 @@ createBioconductorPackage <- function(result) {
   if(!is.null(sizeBIO)) {
     if(sizeBIO < length(allBIO[,"Package"])) { 
       if(sizeBIO >= 1) { 
+        
+        result <- paste(result, '############### Install Bioconductor Package ##############', sep = "\n")
+        
         
         if(input$containerType == "singularity") {
           result <- paste(result, '\tR --slave -e "source(\'https://bioconductor.org/biocLite.R\'); biocLite(); "', sep = "\n")
@@ -360,6 +376,10 @@ createBiocontainer <- function(result, haveR) {
     result <- paste0(result, "\n")
     
     for (tool in selectBioTool){
+      
+      result <- paste(result, '############### Install BioContainer tools ##############', sep = "\n")
+      
+      
       result <- paste(result, getInstallToolPackageBioContainer(tool, input$containerType), sep="\n\n")
     }
   } else {
@@ -405,6 +425,10 @@ createBiocontainer <- function(result, haveR) {
     result <- paste0(result, "\n")
     
     for (tool in selectBioTool){
+      
+      result <- paste(result, '############### Install BioContainer tools ##############', sep = "\n")
+      
+      
       result <- paste0(result, "\nRUN ", getInstallToolPackageBioContainer(tool, input$containerType))
     }
     
@@ -427,8 +451,15 @@ createContentFile <- function() {
     
       haveR = TRUE
     
-      if(input$rtemplate == "source") {
-          result <- createRSource(result)
+      if(input$rtemplate == "source" || input$rtemplate == "source2" || input$rtemplate == "source3") {
+          Rversion = "3.4.3" 
+          if(input$rtemplate == "source2") {
+            Rversion = "3.4.4" 
+          }else if(input$rtemplate == "source3") {
+            Rversion = "3.5.0" 
+          }
+        
+          result <- createRSource(result, Rversion)
       } else if(input$rtemplate == "base") {
           result <- createRBase(result)
       } else if(input$rtemplate == "cran") {
@@ -452,8 +483,8 @@ createContentFile <- function() {
 }
 
 observeEvent(input$createContainer, {
-  
-  print("preview")
+
+  js$collapse("boxPackage")
   
   show("downloadContainerFile")
   

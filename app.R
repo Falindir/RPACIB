@@ -16,6 +16,12 @@ source("./pages/pages_def_home.R", local = T)
 
 options(encoding = 'UTF-8')
 
+jscode <- "
+shinyjs.collapse = function(boxid) {
+$('#' + boxid).closest('.box').find('[data-widget=collapse]').click();
+}
+"
+
 #style <- tags$style(HTML(readLines("www/added_styles.css")) )
 UI <- dashboardPage(
   skin = "green",
@@ -24,6 +30,7 @@ UI <- dashboardPage(
   dashboardBody(
     
     shinyjs::useShinyjs(),
+    extendShinyjs(text = jscode),
     tags$head(tags$link(rel = "stylesheet", type = "text/css", href = "bootstrap.min.readable.css")) ,
     #tags$head(style),
 
