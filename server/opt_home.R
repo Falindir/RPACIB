@@ -451,20 +451,36 @@ createContentFile <- function() {
   return(result)
 }
 
-createContainerPackage <- eventReactive(input$createContainer, {
-
-  result <- createContentFile()
+observeEvent(input$createContainer, {
+  
+  print("preview")
   
   show("downloadContainerFile")
   
-  HTML(result)
+  result <- createContentFile()
+  
+  updateTextAreaInput(session, "previewContainer",
+                      label = "",
+                      value = result)
+  
 })
 
+#createContainerPackage <- eventReactive(input$createContainer, {
+
+  #result <- createContentFile()
+  
+  #show("downloadContainerFile")
+  
+
+  #HTML(result)
+
+#})
 
 
-output$previewContainer <- renderText({
-  createContainerPackage()
-})
+
+#output$previewContainer <- renderText({
+#  createContainerPackage()
+#})
 
 output$downloadContainerFile <- downloadHandler(
   filename = function() {
@@ -476,7 +492,7 @@ output$downloadContainerFile <- downloadHandler(
     }
   },
   content = function(file) {
-    result <- createContentFile()
+    result <- input$previewContainer
     write(result,file=file)
   }
 )

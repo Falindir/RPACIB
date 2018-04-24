@@ -65,7 +65,7 @@ tabHome = fluidPage(align="left",
                              solidHeader = TRUE,
                              status="primary",
                              style='height:1000px; overflow-y: scroll',
-                             verbatimTextOutput("previewContainer")
+                             textAreaInput("previewContainer", label = "", height = "1000px")
                            )
                     )
                     
