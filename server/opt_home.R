@@ -39,10 +39,10 @@ createHeader <- function() {
   
   if(input$containerType == "singularity") {
     result <- "Bootstrap: docker"
-    result <- paste(result, "From: ubuntu:16.04", sep = "\n")
+    result <- paste0(result, "\nFrom: ",  input$fromTemplate)
     result <- paste(result, "IncludeCmd: yes", sep = "\n")
   } else { # else docker
-    result <- "FROM ubuntu:16.04"
+    result <- paste0("FROM ", input$fromTemplate)
   }
 
   result <- paste0(result, "\n")
@@ -164,6 +164,7 @@ createLibPrePost <- function(result) {
   return(result)
 }
 
+#' Use for create install R from RBase content
 createRBase <- function(result) {
   
   result <- paste(result, '############### Install R From RBase ##############', sep = "\n")
@@ -178,6 +179,7 @@ createRBase <- function(result) {
   return(result)
 }
 
+#' Use for create install R from Source content
 createRSource <- function(result, Rversion) {
   
   result <- paste(result, '############### Install R From Source ##############', sep = "\n")
@@ -204,6 +206,7 @@ createRSource <- function(result, Rversion) {
   return(result)
 }
 
+#' Use for create install R from CRAN content
 createRCran <- function(result) {
   
   result <- paste(result, '############### Install R From CRAN ##############', sep = "\n")
@@ -226,6 +229,7 @@ createRCran <- function(result) {
   return(result)
 }
 
+#' Use for create CRAN content
 createCRANPackage <- function(result) {
   
   
@@ -264,6 +268,7 @@ createCRANPackage <- function(result) {
   return(result)
 }
 
+#' Use for create Github content
 createGithubPackage <- function(result) {
   
   if(!is.null(input$rgithubpackagelist)) {
@@ -301,6 +306,7 @@ createGithubPackage <- function(result) {
   return(result)
 }
 
+#' Use for create Bioconductor content
 createBioconductorPackage <- function(result) {
   
   selectBIO <- allBIO[input$dtrbioconductorpackage_rows_all,]
@@ -339,6 +345,7 @@ createBioconductorPackage <- function(result) {
   return(result)
 }
 
+#' Use for create Biocontainer content
 createBiocontainer <- function(result, haveR) {
 
   if(input$containerType == "singularity") {
@@ -446,6 +453,7 @@ createBiocontainer <- function(result, haveR) {
     return(result)
 }
 
+#' Use for create Singularity or Dockerfile
 createContentFile <- function() {
   
   haveR = FALSE
@@ -520,6 +528,7 @@ observeEvent(input$createContainer, {
 #output$previewContainer <- renderText({
 #  createContainerPackage()
 #})
+
 
 output$downloadContainerFile <- downloadHandler(
   filename = function() {

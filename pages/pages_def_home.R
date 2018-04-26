@@ -10,6 +10,8 @@ tabHome = fluidPage(align="left",
                                
                                textInput("imageName", "Image Name", ""),
                                br(),
+                               selectizeInput('fromTemplate', 'From:', choices = c(`ubuntu:16.04` = 'ubuntu:16.04', `rocker/r-base` = 'rocker/r-base'), selected = "ubuntu16", multiple = FALSE),
+                               br(),
                                radioButtons("containerType", "Container type:", choices = list("Singularity" = "singularity", "Docker" = "docker"), selected = "singularity"),
                                br(),
                                #selectizeInput('rcranpackagelist', 'R CRAN:', choices = NULL, multiple=TRUE, options = list(maxItems = 30000)),
