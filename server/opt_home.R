@@ -246,16 +246,16 @@ createCRANPackage <- function(result) {
         result <- paste(result, '############### Install CRAN Package ##############', sep = "\n")
         
         if(input$containerType == "singularity") {
-          listRCRAN <- '\techo install.packages\\(c('
+          listRCRAN <- '\tR --slave -e "install.packages( c('
         } else {
-          listRCRAN <- 'RUN echo install.packages\\(c('
+          listRCRAN <- 'RUN R --slave -e "install.packages( c('
         }
         
         for (pkg in 1:sizeCRAN){
           if(pkg < sizeCRAN) {
-            listRCRAN <- paste0(listRCRAN, '"',selectCRAN[pkg],'", ')
+            listRCRAN <- paste0(listRCRAN, "'",selectCRAN[pkg],"', ")
           } else {
-            listRCRAN <- paste0(listRCRAN, '"',selectCRAN[pkg],'"), repos\\=\'https://cloud.r-project.org\'\\) | R --slave ')
+            listRCRAN <- paste0(listRCRAN, "'",selectCRAN[pkg],"'), repos='https://cloud.r-project.org'))\"")
           }
         }
         
