@@ -61,7 +61,7 @@ createEnv <- function(result) {
   if(input$containerType == "singularity") {
       result <- paste(result, "%environment", sep = "\n")
     
-      if(input$rtemplate == "none") {
+      if(input$rtemplate == "none" || input$fromTemplate == "r-base") {
         
       } else if(input$rtemplate == "base") {
         result <- paste(result, "\tR_VERSION=3.2.5", sep = "\n")
@@ -81,7 +81,7 @@ createEnv <- function(result) {
         result <- paste(result, "\texport PATH=/opt/biotools/bin:$PATH", sep = "\n")
       }
   } else {
-      if(input$rtemplate == "none") {
+      if(input$rtemplate == "none" || input$fromTemplate == "r-base") {
         
       } else if(input$rtemplate == "base") {
         result <- paste0(result, "ENV R_VERSION=", Rversion)
@@ -463,7 +463,7 @@ createContentFile <- function() {
   result <- createLabel(result)
   result <- createLibPrePost(result)
 
-  if(input$rtemplate != "none") {
+  if(input$rtemplate != "none" && input$fromTemplate != "r-base") {
     
       haveR = TRUE
     
