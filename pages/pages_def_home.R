@@ -1,4 +1,29 @@
 tabHome = fluidPage(align="left",
+                    
+                    column(width = 12,
+                           box(
+                             title = "Help",
+                             width = NULL,
+                             collapsible = TRUE,
+                             status="primary",
+                             solidHeader = TRUE,
+                             p("Use button 'Generate' for generate your file and the dowload button for get your file."),
+                             br(),
+                             tags$b("Bioinformatics tools: "),
+                             p("Add your tools by clicking on the corresponding fields in the table. They appear in the field below."),
+                             br(),
+                             tags$b("CRAN Packages: "),
+                             p("Search your package in the filed call 'Package'  and click on the name of your package to select it."),
+                             br(),
+                             tags$b("Bioconductor Packages: "),
+                             p("Search your package in the filed call 'Package'  and click on the name of your package to select it."),
+                             br(),
+                             tags$b("Github R Packages: "),
+                             p("Add your tools by clicking on the corresponding fields in the table. They appear in the field so below."),
+                             br()
+                             
+                             
+                           )),
   
                     column(width = 2,
                            box(
@@ -22,7 +47,7 @@ tabHome = fluidPage(align="left",
                                
                                textAreaInput("customDataContainer", "Add custom line to container file:"),
                                br(), br(),
-                               p("Use button 'Generate' for generate your file and the dowload button for get your file."),
+                              
                                actionButton("createContainer", label = "Generate", icon("paper-plane"), style="color: #fff; background-color: #337ab7; border-color: #2e6da4"),
                                downloadButton('downloadContainerFile', label = "Dowload",  style="color: #fff; background-color: #337ab7; border-color: #2e6da4")
                                
@@ -40,18 +65,18 @@ tabHome = fluidPage(align="left",
                                                    div(id = "formContainer",
                                                        br(),
                                                        selectizeInput('selectedBiocontainer', 'Biocontainer tools selected:', choices = NULL, multiple=TRUE, options = list(maxItems = 30000))),
-                                                   p("Add your tools by clicking on the corresponding fields in the table. They appear in the field below."),
+                                                   
                                                    DT::dataTableOutput('dtbiocontainer')
                                           ),
                                           tabPanel('CRAN Packages',    
-                                            p("Search your package in the filed call 'Package'  and click on the name of your package to select it."),
+                                            
                                             withSpinner(DT::dataTableOutput('dtrcranpackage'), type = 4, proxy.height = "150px")
                                           ),
                                           tabPanel('Bioconductor Packages',   
                                             div(id = "formBioconductor",
                                             #  br(),
                                             #selectizeInput('selectedBioconductor', 'R Bioconductor selected:', choices = NULL, multiple=TRUE, options = list(maxItems = 30000)),
-                                            p("Search your package in the filed call 'Package'  and click on the name of your package to select it."),
+                                            
                                             DT::dataTableOutput('dtrbioconductorpackage'))),
                                           tabPanel('Github R Packages',
                                             textInput("inputGithub", "Package name:", ""),
@@ -59,7 +84,7 @@ tabHome = fluidPage(align="left",
                                             div(id = "formGithub",
                                             br(), br(),
                                             selectizeInput('rgithubpackagelist', 'R Github selected:', choices = NULL, multiple=TRUE, options = list(maxItems = 30000)),
-                                            p("Add your tools by clicking on the corresponding fields in the table. They appear in the field so below."),
+                                            
                                             br(), br(),
                                             DT::dataTableOutput('dtrgithubpackage')))
                                           
