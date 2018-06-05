@@ -22,8 +22,8 @@ tabHome = fluidPage(align="left",
                                
                                textAreaInput("customDataContainer", "Add custom line to container file:"),
                                br(), br(),
-                               p("Use button create for generate your file and the dowload button for get your file."),
-                               actionButton("createContainer", label = "Create", icon("paper-plane"), style="color: #fff; background-color: #337ab7; border-color: #2e6da4"),
+                               p("Use button 'Generate' for generate your file and the dowload button for get your file."),
+                               actionButton("createContainer", label = "Generate", icon("paper-plane"), style="color: #fff; background-color: #337ab7; border-color: #2e6da4"),
                                downloadButton('downloadContainerFile', label = "Dowload",  style="color: #fff; background-color: #337ab7; border-color: #2e6da4")
                                
                            )),
@@ -40,7 +40,7 @@ tabHome = fluidPage(align="left",
                                                    div(id = "formContainer",
                                                        br(),
                                                        selectizeInput('selectedBiocontainer', 'Biocontainer tools selected:', choices = NULL, multiple=TRUE, options = list(maxItems = 30000))),
-                                                   p("Add your tools by clicking on the corresponding fields in the table. They appear in the field so below."),
+                                                   p("Add your tools by clicking on the corresponding fields in the table. They appear in the field below."),
                                                    DT::dataTableOutput('dtbiocontainer')
                                           ),
                                           tabPanel('CRAN Packages',    
