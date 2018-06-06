@@ -147,7 +147,7 @@ createLibPrePost <- function(result) {
       result <- paste(result, "\tapt-get install -y wget libblas3 libblas-dev liblapack-dev liblapack3 curl", sep = "\n")
       result <- paste(result, "\tapt-get install -y gcc fort77 aptitude", sep = "\n")
       result <- paste(result, "\taptitude install -y g++ xorg-dev libreadline-dev  gfortran", sep = "\n")
-      result <- paste(result, "\tapt-get install -y libssl-dev libxml2-dev libpcre3-dev liblzma-dev libbz2-dev libcurl4-openssl-dev", sep = "\n")
+      result <- paste(result, "\tapt-get install -y libssl-dev libxml2-dev libpcre3-dev liblzma-dev libbz2-dev libcurl4-openssl-dev git", sep = "\n")
       result <- paste(result, "\tapt-get update", sep = "\n")
   } else {
       result <- paste(result, "RUN apt-get update", sep = "\n")
