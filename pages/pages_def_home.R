@@ -20,8 +20,11 @@ tabHome = fluidPage(align="left",
                              p("Add your tools by clicking on the corresponding field in the table. They appear in the field so below."),
                              br(),
                              p("Use 'Generate' button to generate your recipe in the preview area then copy/paste the text or use dowload button to get your file."),
-                             br()
-                             
+                             p("# To build the image from the recipes file named ubuntu6.10_stacks2.0.simg :"),
+                             p("sudo singularity build ubuntu6.10_stacks2.0.simg ubuntu6.10_stacks2.0.recipes"),
+                             p("# to run a program inside the image container :"),
+                             p(" singularity exec ubuntu6.10_stacks2.0.simg python --version "),
+                             p("singularity exec ubuntu6.10_stacks2.0.simg python -c 'import pysam; print 2*2'")
                            )),
   
                     column(width = 2,
