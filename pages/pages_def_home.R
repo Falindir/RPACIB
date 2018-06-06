@@ -18,9 +18,9 @@ tabHome = fluidPage(align="left",
                              br(),
                              tags$b("Github R Packages: "),
                              p("Add your tools by clicking on the corresponding field in the table. They appear in the field so below."),
-                             br()
-                             p("Use 'Generate' button to generate your recipe in the preview area then copy/paste the text or use dowload button to get your file."),
                              br(),
+                             p("Use 'Generate' button to generate your recipe in the preview area then copy/paste the text or use dowload button to get your file."),
+                             br()
                              
                            )),
   
