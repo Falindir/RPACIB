@@ -234,8 +234,7 @@ createCRANPackage <- function(result) {
   
   
   
-  selectCRAN <- allCRAN[input$dtrcranpackage_rows_all,]
-  selectCRAN <- selectCRAN[,"Package"]
+  selectCRAN <- input$selectedCRAN
   sizeCRAN <- length(selectCRAN)
   
   
@@ -309,9 +308,10 @@ createGithubPackage <- function(result) {
 #' Use for create Bioconductor content
 createBioconductorPackage <- function(result) {
   
-  selectBIO <- allBIO[input$dtrbioconductorpackage_rows_all,]
-  selectBIO <- selectBIO[,"Package"]
+  selectBIO <- input$selectedConductor
   sizeBIO <- length(selectBIO)
+  
+  
   
   if(!is.null(sizeBIO)) {
     if(sizeBIO < length(allBIO[,"Package"])) { 
@@ -322,10 +322,10 @@ createBioconductorPackage <- function(result) {
         
         if(input$containerType == "singularity") {
           result <- paste(result, '\tR --slave -e "source(\'https://bioconductor.org/biocLite.R\'); biocLite(); "', sep = "\n")
-          listRBIO <- '\tR --slave -e "source(\'https://bioconductor.org/biocLite.R\'); biocLite(\\'
+          listRBIO <- '\tR --slave -e "source(\'https://bioconductor.org/biocLite.R\'); biocLite('
         } else {
           result <- paste(result, 'RUN R --slave -e "source(\'https://bioconductor.org/biocLite.R\'); biocLite(); "', sep = "\n")
-          listRBIO <- 'RUN R --slave -e "source(\'https://bioconductor.org/biocLite.R\'); biocLite(\\'
+          listRBIO <- 'RUN R --slave -e "source(\'https://bioconductor.org/biocLite.R\'); biocLite('
         }
       
         for (pkg in 1:sizeBIO){
@@ -482,10 +482,11 @@ createContentFile <- function() {
           result <- createRCran(result)
       }
       
+  }
+      
       result <- createCRANPackage(result)
       result <- createBioconductorPackage(result)
       result <- createGithubPackage(result)
-  } 
 
   if(!is.null(input$selectedBiocontainer)) {
     result <- createBiocontainer(result, haveR)
@@ -559,6 +560,43 @@ observe({
     selectBiocontainer <- c(unlist(selectBiocontainer))
     updateSelectizeInput(session,"selectedBiocontainer", choices = selectBiocontainer, selected = selectBiocontainer, options = list())
   }
+})
+
+
+observe({
+  
+  if(is.null(input$dtrcranpackage_rows_selected)) {
+    shinyjs::reset("formCRAN")
+  } else {
+    i = 1
+    selectCRAN <<- list()
+    for(x in input$dtrcranpackage_rows_selected) {
+      selectCRAN[i] <<- as.character(allCRAN$Package[x])
+      i = i + 1
+    }
+    #selectCRAN <- c(unlist(selectCRAN))
+    updateSelectizeInput(session,"selectedCRAN", choices = selectCRAN, selected = selectCRAN, options = list())
+    
+  }
+  
+})
+
+observe({
+  
+  if(is.null(input$dtrbioconductorpackage_rows_selected)) {
+    shinyjs::reset("formBioconductor")
+  } else {
+    i = 1
+    selectConductor <<- list()
+    for(x in input$dtrbioconductorpackage_rows_selected) {
+      selectConductor[i] <<-as.character(allBIO$Package[x])
+      i = i + 1
+    }
+
+    updateSelectizeInput(session,"selectedConductor", choices = selectConductor, selected = selectConductor, options = list())
+    
+  }
+  
 })
 
 

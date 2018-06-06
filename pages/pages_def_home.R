@@ -67,14 +67,19 @@ tabHome = fluidPage(align="left",
                                                    
                                                    DT::dataTableOutput('dtbiocontainer')
                                           ),
-                                          tabPanel('CRAN Packages',    
-                                            
-                                            withSpinner(DT::dataTableOutput('dtrcranpackage'), type = 4, proxy.height = "150px")
+                                          tabPanel('CRAN Packages', 
+                                                   div(id = "formCRAN",
+                                                    selectizeInput('selectedCRAN', 'CRAN package selected:', choices = NULL, multiple=TRUE, options = list(maxItems = 30000))
+                                                   ,
+                                          
+                                                    withSpinner(DT::dataTableOutput('dtrcranpackage'), type = 4, proxy.height = "150px")
+                                                  )
                                           ),
                                           tabPanel('Bioconductor Packages',   
                                             div(id = "formBioconductor",
                                             #  br(),
                                             #selectizeInput('selectedBioconductor', 'R Bioconductor selected:', choices = NULL, multiple=TRUE, options = list(maxItems = 30000)),
+                                            selectizeInput('selectedConductor', 'Bioconductor package selected:', choices = NULL, multiple=TRUE, options = list(maxItems = 30000)),
                                             
                                             DT::dataTableOutput('dtrbioconductorpackage'))),
                                           tabPanel('Github R Packages',
