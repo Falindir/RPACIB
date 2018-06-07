@@ -373,8 +373,8 @@ createBiocontainer <- function(result, haveR) {
     
     result <- paste0(result, "\n")
   
-    result <- paste(result, '\tif[!-d "/opt/biotools"];then mkdir /opt/biotools; fi', sep = "\n")
-    result <- paste(result, '\tif[!-d "/opt/biotools/bin"];then mkdir /opt/biotools; fi', sep = "\n")
+    result <- paste(result, '\tif [ ! -d "/opt/biotools" ];then mkdir /opt/biotools; fi', sep = "\n")
+    result <- paste(result, '\tif [ ! -d "/opt/biotools/bin" ];then mkdir /opt/biotools/bin; fi', sep = "\n")
     result <- paste(result, "\tchmod 777 -R /opt/biotools/", sep = "\n")
     result <- paste(result, "\texport PATH=/opt/biotools/bin:$PATH", sep = "\n")
     
