@@ -351,20 +351,13 @@ createBioconductorPackage <- function(result) {
 }
 
 createPathBiocontainer <- function(result) {
-  
-  
-  print("PATH")
-  
+
   if(input$containerType == "singularity") {
     selectBioTool <- input$selectedBiocontainer
     for (tool in selectBioTool){
-      
-      print(tool)
-      
+    
       to <- getInstallToolEnvBioContainer(tool, input$containerType)
-      
-      print(to)
-      
+    
       if(is.character(to)) {
         result <- paste0(result, "\n\t", to)
       }
@@ -384,8 +377,6 @@ createPathBiocontainer <- function(result) {
     }
     
   }
-  
-  print(result)
   
   return(result)
   
