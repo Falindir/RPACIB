@@ -86,5 +86,32 @@ getInstallToolPackageBioContainer <- function(tool, containerType) {
 
 }
 
+getInstallToolEnvBioContainer <- function(tool, containerType) {
+  
+  data <- allBIOCONTAINER
+  
+  size <- length(data)
+  
+  intalls <- ""
+  
+  for (tools in data) {
+    splitB <- strsplit(tool, "%")  
+    name <- splitB[[1]][1]
+    version <- splitB[[1]][2]
+    
+    if(tools$name == name) {
+      if(tools$version == version) {
+        if(is.null(tools$env)) {
+          return (FALSE)
+        } else {
+          return(tools$env)
+        }
+      }
+    }
+  }
+  
+  return (FALSE)
+}
+
 
 

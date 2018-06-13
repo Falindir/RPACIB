@@ -79,7 +79,11 @@ createEnv <- function(result) {
       if(!is.null(input$dtbiocontainer_rows_all)) {
         result <- paste(result, "\texport PATH=/opt/conda/bin:$PATH", sep = "\n")
         result <- paste(result, "\texport PATH=/opt/biotools/bin:$PATH", sep = "\n")
+        
+        result <- createPathBiocontainer(result)
       }
+      
+      
   } else {
       if(input$rtemplate == "none" || input$fromTemplate == "r-base") {
         
@@ -99,6 +103,7 @@ createEnv <- function(result) {
       if(!is.null(input$dtbiocontainer_rows_all)) {
         result <- paste(result, "RUN export PATH=/opt/conda/bin:$PATH", sep = "\n")
         result <- paste(result, "RUN export PATH=/opt/biotools/bin:$PATH", sep = "\n")
+        result <- createPathBiocontainer(result)
       }
   }
 
@@ -343,6 +348,47 @@ createBioconductorPackage <- function(result) {
   }
   
   return(result)
+}
+
+createPathBiocontainer <- function(result) {
+  
+  
+  print("PATH")
+  
+  if(input$containerType == "singularity") {
+    selectBioTool <- input$selectedBiocontainer
+    for (tool in selectBioTool){
+      
+      print(tool)
+      
+      to <- getInstallToolEnvBioContainer(tool, input$containerType)
+      
+      print(to)
+      
+      if(is.character(to)) {
+        result <- paste0(result, "\n\t", to)
+      }
+  
+    }
+    
+  } else {
+    selectBioTool <- input$selectedBiocontainer
+    for (tool in selectBioTool){
+      
+      to <- getInstallToolEnvBioContainer(tool, input$containerType)
+      
+      if(is.character(to)) {
+        result <- paste0(result, "\nRUN ", to)
+      }
+      
+    }
+    
+  }
+  
+  print(result)
+  
+  return(result)
+  
 }
 
 #' Use for create Biocontainer content
