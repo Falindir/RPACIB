@@ -30,7 +30,7 @@ containers: [
 ,{ name: "frc_align", version: "20150723", description: "Computes FRC from SAM/BAM file and not from afg files", documentation: "https://github.com/jts/frc_courve", install: [] }
 ,{ name: "gapcloser", version: "1.12", description: "A novel short-read assembly method that can build a de novo draft assembly for the human-sized genomes", documentation: "http://soap.genomics.org.cn/gapcloser.html", install: ["conda install soapdenovo2-gapcloser=1.12"] }
 ,{ name: "gatk", version: "3.8", description: "The full Genome Analysis Toolkit (GATK) framework, license restricted.", documentation: "", install: ["conda install gatk=3.8"] }
-,{ name: "gatk4", version: "4.0", description: "The full Genome Analysis Toolkit (GATK) framework, license restricted.", documentation: "", install: ["conda install gatk=3.8"] }
+,{ name: "gatk4", version: "4.0", description: "The full Genome Analysis Toolkit (GATK) framework, license restricted.", documentation: "", install: ["cd /opt/biotools; apt-get install -y openjdk-8-jdk; wget https://github.com/broadinstitute/gatk/releases/download/4.0.5.1/gatk-4.0.5.1.zip;unzip gatk-4.0.5.1.zip;Rscript -e ' dependencies = c("getopt", "optparse","data.table","ggplot2","gplots","gsalib"); install.packages(dependencies)';"], env: "export PATH='$PATH':$PWD/gatk-4.0.5.1" }
 ,{ name: "gcta", version: "1.24.7", description: "", documentation: "", install: ["conda install -c biobuilds gcta=1.26.0"] }
 ,{ name: "htslib", version: "1.8", description: "", documentation: "", install: ["conda install htslib=1.8"] }
 ,{ name: "jbrowse", version: "1.12.1", description: "", documentation: "", install: ["conda install jbrowse=1.12.1"] }
