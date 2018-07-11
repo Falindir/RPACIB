@@ -33,7 +33,9 @@ tabHome = fluidPage(align="left",
                                
                                textInput("imageName", "Image Name", ""),
                                br(),
-                               selectizeInput('fromTemplate', 'From:', choices = c(`ubuntu:16.04` = 'ubuntu:16.04', `r-base` = 'r-base'), selected = "r-base", multiple = FALSE),
+                               #selectizeInput('fromTemplate', 'From:', choices = c(`ubuntu:16.04` = 'ubuntu:16.04', `r-base` = 'r-base'), selected = "r-base", multiple = FALSE),
+                               selectizeInput('fromTemplate', 'From:', choices = c(`ubuntu:16.04` = 'ubuntu:16.04'), selected = "ubuntu:16.04", multiple = FALSE),
+                               
                                br(),
                                radioButtons("containerType", "Container type:", choices = list("Singularity" = "singularity", "Docker" = "docker"), selected = "singularity"),
                                br(),

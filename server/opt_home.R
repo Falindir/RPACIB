@@ -79,6 +79,8 @@ createEnv <- function(result) {
       if(!is.null(input$dtbiocontainer_rows_all)) {
         result <- paste(result, "\texport PATH=/opt/conda/bin:$PATH", sep = "\n")
         result <- paste(result, "\texport PATH=/opt/biotools/bin:$PATH", sep = "\n")
+        result <- paste(result, "\texport ROOTSYS=/opt/biotools/root", sep = "\n")
+        result <- paste(result, "\texport LD_LIBRARY_PATH='$LD_LIBRARY_PATH:$ROOTSYS/lib'", sep = "\n")
         
         result <- createPathBiocontainer(result)
       }
@@ -103,6 +105,9 @@ createEnv <- function(result) {
       if(!is.null(input$dtbiocontainer_rows_all)) {
         result <- paste(result, "RUN export PATH=/opt/conda/bin:$PATH", sep = "\n")
         result <- paste(result, "RUN export PATH=/opt/biotools/bin:$PATH", sep = "\n")
+        result <- paste(result, "RUN export ROOTSYS=/opt/biotools/root", sep = "\n")
+        result <- paste(result, "RUN export LD_LIBRARY_PATH='$LD_LIBRARY_PATH:$ROOTSYS/lib'", sep = "\n")
+        
         result <- createPathBiocontainer(result)
       }
   }
@@ -390,7 +395,7 @@ createBiocontainer <- function(result, haveR) {
     
     result <- paste0(result, "\n")
     
-    result <- paste(result, "\tapt-get install -y  autotools-dev automake cmake curl grep sed dpkg fuse git zip openjdk-8-jre build-essential pkg-config python python-dev python-pip bzip2 ca-certificates libglib2.0-0 libxext6 libsm6 libxrender1 mercurial subversion zlib1g-dev", sep = "\n")
+    result <- paste(result, "\tapt-get install -y  autotools-dev automake cmake curl grep sed dpkg fuse git zip openjdk-8-jre build-essential pkg-config python python-dev python-pip bzip2 ca-certificates libglib2.0-0 libxext6 libsm6 libxrender1 mercurial subversion zlib1g-dev libncurses5-dev libncursesw5-dev", sep = "\n")
     result <- paste(result, "\tapt-get update", sep = "\n")
     
     result <- paste0(result, "\n")
@@ -439,7 +444,7 @@ createBiocontainer <- function(result, haveR) {
     
     result <- paste0(result, "\n")
     
-    result <- paste(result, "RUN apt-get install -y  autotools-dev automake cmake curl grep sed dpkg fuse git zip openjdk-8-jre build-essential pkg-config python python-dev python-pip bzip2 ca-certificates libglib2.0-0 libxext6 libsm6 libxrender1 mercurial subversion zlib1g-dev", sep = "\n")
+    result <- paste(result, "RUN apt-get install -y  autotools-dev automake cmake curl grep sed dpkg fuse git zip openjdk-8-jre build-essential pkg-config python python-dev python-pip bzip2 ca-certificates libglib2.0-0 libxext6 libsm6 libxrender1 mercurial subversion zlib1g-dev libncurses5-dev libncursesw5-dev", sep = "\n")
     result <- paste(result, "RUN apt-get update", sep = "\n")
     
     result <- paste0(result, "\n")
